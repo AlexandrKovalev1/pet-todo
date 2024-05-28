@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { Header } from './layout/header/Header';
 import { Main } from './layout/main/Main';
@@ -8,9 +8,18 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { todolistSelector } from './selectors/selectors';
 import { TodoList } from './components/todoLIst/TodoList';
+import { getTodosTC } from './redux/reducers/todolistReducer';
+import { useAppDispatch } from './redux/store/store';
 
 function App() {
 	let todolists = useSelector(todolistSelector);
+
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		dispatch(getTodosTC());
+	}, []);
+
 	return (
 		<div className='App'>
 			<Header />
@@ -20,6 +29,7 @@ function App() {
 						<CreateTodolist />
 						{todolists.map(todo => (
 							<TodoList
+								key={todo.id}
 								filter={todo.filter}
 								todoId={todo.id}
 								title={todo.title}

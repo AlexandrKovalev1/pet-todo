@@ -4,14 +4,24 @@ import {
 	deleteTodoAC,
 	setFilterTodolistAC,
 	todolistReducer,
-	TodolistType,
+	TodolistDomainType,
+	setTodoListsAC,
 } from './todolistReducer';
 import { v4 } from 'uuid';
+import { TodolistType } from '../../api/todolists-api';
 
-let initState: TodolistType[] = [];
+let initState: TodolistDomainType[] = [];
+let todolists: TodolistType[];
 describe('reducer test', () => {
 	beforeEach(() => {
-		initState = [{ id: v4(), title: 'First Todo', filter: 'All' }];
+		initState = [
+			{ id: v4(), title: 'First Todo', filter: 'All', addedDate: '', order: 0 },
+		];
+
+		todolists = [
+			{ id: v4(), title: 'First Todo', addedDate: '', order: 0 },
+			{ id: v4(), title: 'Second Todo', addedDate: '', order: 0 },
+		];
 	});
 
 	it('should be add todo', () => {
@@ -42,5 +52,14 @@ describe('reducer test', () => {
 
 		expect(newState.length).toBe(1);
 		expect(newState[0].filter).toBe('Active');
+	});
+
+	it('todolists should be set to the state', () => {
+		let action = setTodoListsAC(todolists);
+		let newState = todolistReducer(initState, action);
+
+		expect(newState.length).toBe(2);
+		expect(newState[0].filter).toBeDefined();
+		expect(newState[1].filter).toBe('All');
 	});
 });

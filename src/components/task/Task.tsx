@@ -2,33 +2,45 @@ import { ChangeEvent, FC } from 'react';
 import styled, { css } from 'styled-components';
 import { Button } from '../button/Button';
 import { Icon } from '../icon/Icon';
-import { FilterType } from '../../redux/reducers/todolistReducer';
 import { useDispatch } from 'react-redux';
 import {
 	changeTaskStatusAC,
 	deleteTaskAC,
+	editTaskTitleAC,
 } from '../../redux/reducers/tasksReducer';
+import { EditableSpan } from '../editableSpan/EditableSpan';
+import { TaskStatuses } from '../../api/task-api';
 
 type Props = {
 	title: string;
-	isDone: boolean;
+	status: TaskStatuses;
 	taskId: string;
 	todoId: string;
 };
-export const Task: FC<Props> = ({ title, isDone, taskId, todoId, ...rest }) => {
+export const Task: FC<Props> = ({ title, status, taskId, todoId, ...rest }) => {
 	let dispatch = useDispatch();
 
+	let taskIsCompleted = status === TaskStatuses.Completed;
 	const deleteTask = () => {
 		dispatch(deleteTaskAC(todoId, taskId));
 	};
 
 	const changeTask = (e: ChangeEvent<HTMLInputElement>) => {
-		dispatch(changeTaskStatusAC(todoId, taskId, e.currentTarget.checked));
+		let status = e.currentTarget.checked
+			? TaskStatuses.Completed
+			: TaskStatuses.New;
+
+		dispatch(changeTaskStatusAC(todoId, taskId, status));
+	};
+
+	const editTaskTitle = (text: string) => {
+		dispatch(editTaskTitleAC(todoId, taskId, text));
 	};
 	return (
-		<Wrapper isDone={isDone}>
-			<input type='checkbox' checked={isDone} onChange={changeTask} />
-			<StyledSpan isDone={isDone}>{title}</StyledSpan>
+		<Wrapper completed={taskIsCompleted}>
+			<input type='checkbox' checked={taskIsCompleted} onChange={changeTask} />
+			<EditableSpan status={status} title={title} editText={editTaskTitle} />
+			{/*<StyledSpan isDone={isDone}>{title}</StyledSpan>*/}
 			<Button styleType={'remove'} onClick={deleteTask}>
 				<Icon
 					iconId={'iconTrash'}
@@ -41,7 +53,7 @@ export const Task: FC<Props> = ({ title, isDone, taskId, todoId, ...rest }) => {
 	);
 };
 
-const Wrapper = styled.div<{ isDone: boolean }>`
+const Wrapper = styled.div<{ completed: boolean }>`
 	padding: 5px 15px;
 	display: flex;
 	align-items: center;
@@ -50,8 +62,8 @@ const Wrapper = styled.div<{ isDone: boolean }>`
 	width: 100%;
 
 	${props =>
-		props.isDone &&
-		css<{ isDone: boolean }>`
+		props.completed &&
+		css<{ completed: boolean }>`
 			opacity: 0.5;
 		`}
 
@@ -64,13 +76,14 @@ const Wrapper = styled.div<{ isDone: boolean }>`
 	}
 `;
 
-const StyledSpan = styled.span<{ isDone: boolean }>`
+const StyledSpan = styled.span<{ completed: boolean }>`
 	width: 100%;
 	text-align: center;
 	color: darkblue;
+	font-size: 1.7rem;
 	${props =>
-		props.isDone &&
-		css<{ isDone: boolean }>`
+		props.completed &&
+		css<{ completed: boolean }>`
 			text-decoration: line-through;
 		`}
 `;

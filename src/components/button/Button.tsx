@@ -1,13 +1,17 @@
 import { ButtonHTMLAttributes, FC } from 'react';
-import styled, { css } from 'styled-components';
-import { Icon } from '../icon/Icon';
+import styled, { css, StyleSheetManager } from 'styled-components';
+import isPropValid from '@emotion/is-prop-valid';
 
 type Props = {
 	styleType: 'addTodo' | 'remove' | 'filter';
 	active?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 export const Button: FC<Props> = ({ children, ...rest }) => {
-	return <StyledButton {...rest}>{children}</StyledButton>;
+	return (
+		<StyleSheetManager shouldForwardProp={prop => isPropValid(prop)}>
+			<StyledButton {...rest}>{children}</StyledButton>
+		</StyleSheetManager>
+	);
 };
 
 const StyledButton = styled.button<Props>`
@@ -16,6 +20,32 @@ const StyledButton = styled.button<Props>`
 	background-color: unset;
 	cursor: pointer;
 
+	${props =>
+		props.styleType === 'addTodo' &&
+		css<Props>`
+			border: none;
+			border-radius: 2px;
+			text-decoration: none;
+			color: white;
+			background: #9acd32;
+			box-shadow: 0 2px 0 #749a25;
+			padding: 3px 10px;
+
+			&:hover {
+				background: #749a25;
+				box-shadow: none;
+				position: relative;
+				top: 1px;
+			}
+
+			&:disabled {
+				opacity: 0.5;
+				background: #749a25;
+				box-shadow: none;
+				position: relative;
+				top: 0;
+			}
+		`}
 	${props =>
 		props.styleType === 'remove' &&
 		css<Props>`
@@ -26,11 +56,12 @@ const StyledButton = styled.button<Props>`
 			}
 		`}
 
-	${props =>
+    ${props =>
 		props.styleType === 'filter' &&
 		css<Props>`
 			font-size: 1rem;
 			width: 100%;
+
 			&:hover {
 				font-weight: bold;
 				background-color: rgba(0, 255, 255, 0.3);

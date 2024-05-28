@@ -10,7 +10,7 @@ export const Header: FC<Props> = ({ ...rest }) => {
 			<Container width={'1440px'}>
 				<FlexWrapper>
 					<h1>
-						<a href='#'>
+						<a href='/'>
 							<Icon iconId={'logo'} viewBox={'0 75 250 90'} />
 						</a>
 					</h1>

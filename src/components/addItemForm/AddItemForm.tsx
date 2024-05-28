@@ -1,34 +1,26 @@
 import { Button } from '../button/Button';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { ChangeEvent, FC, useState, KeyboardEvent } from 'react';
 
 type Props = {
-	setError?: (error: string) => void;
-	maxLength?: number;
 	onClickFoo?: (text: string) => void;
 };
-export const AddItemForm: FC<Props> = ({
-	setError,
-	maxLength,
-	onClickFoo,
-	...rest
-}) => {
+export const AddItemForm: FC<Props> = ({ onClickFoo, ...rest }) => {
 	const [text, setText] = useState('');
-
+	const [error, setError] = useState('');
+	let maxLength = 20;
 	const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
 		let textValue = e.currentTarget.value;
-		if (maxLength) {
-			if (textValue.length >= maxLength) {
-				return setError?.(`Max length ${maxLength} symbols`);
-			}
+		if (textValue.length >= maxLength) {
+			return setError(`Max length ${maxLength} symbols`);
 		}
-
+		error && setError('');
 		setText(textValue);
 	};
 
 	const onClickHandler = () => {
 		if (!text.trim().length) {
-			return setError?.('Requaired');
+			return setError('Requaired');
 		}
 		onClickFoo?.(text.trim());
 		setText('');
@@ -37,8 +29,9 @@ export const AddItemForm: FC<Props> = ({
 	const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter') {
 			if (!text.trim().length) {
-				return setError?.('Requaired');
+				return setError('Requaired');
 			}
+
 			onClickFoo?.(text.trim());
 			setText('');
 		}
@@ -46,22 +39,52 @@ export const AddItemForm: FC<Props> = ({
 
 	return (
 		<Wrapper>
-			<input
-				type='text'
-				value={text}
-				onChange={onChangeHandler}
-				autoFocus
-				onKeyDown={onKeyPressHandler}
-			/>
-			<Button styleType={'addTodo'} onClick={onClickHandler}>
-				+
-			</Button>
+			<InputBlock>
+				<InputStyled
+					type='text'
+					value={text}
+					onChange={onChangeHandler}
+					autoFocus
+					onKeyDown={onKeyPressHandler}
+					error={error}
+				/>
+				<Button
+					styleType={'addTodo'}
+					onClick={onClickHandler}
+					disabled={!text || !!error}
+				>
+					+
+				</Button>
+			</InputBlock>
+			{error && <Error>{error}</Error>}
 		</Wrapper>
 	);
 };
 
 const Wrapper = styled.div`
 	display: flex;
+	flex-direction: column;
+	gap: 5px;
+`;
+
+const Error = styled.b`
+	color: red;
+`;
+
+const InputBlock = styled.div`
+	display: flex;
 	align-items: center;
 	gap: 5px;
+`;
+
+const InputStyled = styled.input<{ error: string }>`
+	border: 1px solid #749a25;
+	outline: none;
+	padding: 5px 2px;
+
+	${props =>
+		props.error &&
+		css<{ error: string }>`
+			border: 2px solid red;
+		`}
 `;

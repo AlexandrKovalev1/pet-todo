@@ -1,6 +1,5 @@
 import { RootStateType } from '../redux/store/store';
-import { TodolistType } from '../redux/reducers/todolistReducer';
-import { TasksType } from '../redux/reducers/tasksReducer';
+import { TodolistDomainType } from '../redux/reducers/todolistReducer';
 
-export const todolistSelector = (state: RootStateType): TodolistType[] =>
+export const todolistSelector = (state: RootStateType): TodolistDomainType[] =>
 	state.todoLists;

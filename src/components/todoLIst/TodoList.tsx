@@ -1,13 +1,13 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { ShadowWrapper } from '../shadowWrapper/ShadowWrapper';
 import styled from 'styled-components';
 import { AddItemForm } from '../addItemForm/AddItemForm';
 import { FilterType } from '../../redux/reducers/todolistReducer';
 import { FilterMenu } from './filterMenu/FilterMenu';
-import { useDispatch, useSelector } from 'react-redux';
-import { addTaskAC, TaskType } from '../../redux/reducers/tasksReducer';
-import { RootStateType } from '../../redux/store/store';
+import { addTaskAC, getTasks } from '../../redux/reducers/tasksReducer';
+import { useAppDispatch, useAppSelector } from '../../redux/store/store';
 import { Task } from '../task/Task';
+import { TaskStatuses, TaskType } from '../../api/task-api';
 
 type Props = {
 	todoId: string;
@@ -17,10 +17,12 @@ type Props = {
 export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 	const [openSettings, setOpenSettings] = useState(false);
 
-	let tasks = useSelector<RootStateType, TaskType[]>(
-		state => state.tasks[todoId],
-	);
-	let dispatch = useDispatch();
+	let tasks = useAppSelector<TaskType[]>(state => state.tasks[todoId]);
+	let dispatch = useAppDispatch();
+
+	useEffect(() => {
+		dispatch(getTasks(todoId));
+	}, []);
 
 	const addTask = (text: string) => {
 		dispatch(addTaskAC(todoId, text));
@@ -28,10 +30,10 @@ export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 
 	function filterTasks(filter: FilterType, tasks: TaskType[]) {
 		if (filter === 'Completed') {
-			return tasks.filter(task => task.isDone);
+			return tasks.filter(task => task.status === TaskStatuses.Completed);
 		}
 		if (filter === 'Active') {
-			return tasks.filter(task => !task.isDone);
+			return tasks.filter(task => task.status === TaskStatuses.New);
 		}
 		return tasks;
 	}
@@ -52,13 +54,13 @@ export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 						todoId={todoId}
 					/>
 				</MenuAndFilter>
-				<h2 style={{ color: 'darkblue' }}>{title}</h2>
+				<h2 style={{ color: 'brown' }}>{title}</h2>
 				<AddItemForm onClickFoo={addTask} />
 				{filteredTasks.map(task => (
 					<Task
 						key={task.id}
 						title={task.title}
-						isDone={task.isDone}
+						status={task.status}
 						taskId={task.id}
 						todoId={todoId}
 					/>
