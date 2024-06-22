@@ -1,6 +1,6 @@
 import { Task } from './Task';
 import { Provider } from 'react-redux';
-import { store } from '../../redux/store/store';
+import { store } from '../../app/store';
 import { StoryObj } from '@storybook/react';
 import { ReduxStoreProviderDecorator } from '../../../.storybook/ReduxStoreProviderDecorator';
 import { TaskStatuses } from '../../api/task-api';
@@ -35,6 +35,7 @@ export const TaskNotIsDone = () => (
 			status={TaskStatuses.New}
 			taskId={'1'}
 			todoId={'1'}
+			entityStatus={'idle'}
 		/>
 	</Provider>
 );
@@ -46,6 +47,7 @@ export const TaskIsDone = () => (
 			status={TaskStatuses.Completed}
 			taskId={'2'}
 			todoId={'1'}
+			entityStatus={'idle'}
 		/>
 	</Provider>
 );

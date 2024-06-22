@@ -4,8 +4,9 @@ import { ChangeEvent, FC, useState, KeyboardEvent } from 'react';
 
 type Props = {
 	onClickFoo?: (text: string) => void;
+	disabled?: boolean;
 };
-export const AddItemForm: FC<Props> = ({ onClickFoo, ...rest }) => {
+export const AddItemForm: FC<Props> = ({ onClickFoo, disabled, ...rest }) => {
 	const [text, setText] = useState('');
 	const [error, setError] = useState('');
 	let maxLength = 20;
@@ -47,11 +48,12 @@ export const AddItemForm: FC<Props> = ({ onClickFoo, ...rest }) => {
 					autoFocus
 					onKeyDown={onKeyPressHandler}
 					error={error}
+					disabled={disabled}
 				/>
 				<Button
 					styleType={'addTodo'}
 					onClick={onClickHandler}
-					disabled={!text || !!error}
+					disabled={!text || !!error || disabled}
 				>
 					+
 				</Button>

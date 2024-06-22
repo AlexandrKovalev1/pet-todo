@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import { Button } from '../../button/Button';
-import { Icon } from '../../icon/Icon';
+import { Button } from '../../../components/button/Button';
+import { Icon } from '../../../components/icon/Icon';
 import styled from 'styled-components';
 import {
-	deleteTodoAC,
+	deleteTodoListTC,
 	FilterType,
 	setFilterTodolistAC,
-} from '../../../redux/reducers/todolistReducer';
-import { useDispatch } from 'react-redux';
+} from '../../../bll/todolistReducer';
+import { useAppDispatch } from '../../../app/store';
 
 type Props = {
 	active: boolean;
@@ -22,8 +22,8 @@ export const FilterMenu: FC<Props> = ({
 	todoId,
 	...rest
 }) => {
-	const dispatch = useDispatch();
-	const deleteTodo = () => dispatch(deleteTodoAC(todoId));
+	const dispatch = useAppDispatch();
+	const deleteTodo = () => dispatch(deleteTodoListTC(todoId));
 	const setOpen = () => setActive(true);
 	const setClose = () => setActive(false);
 

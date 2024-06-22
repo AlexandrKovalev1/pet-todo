@@ -6,6 +6,7 @@ type Props = {
 	editText: (text: string) => void;
 	status: TaskStatuses;
 	title: string;
+	disabled?: boolean;
 };
 
 //todo -приделать обработку ошибок
@@ -13,13 +14,14 @@ export const EditableSpan: FC<Props> = ({
 	status,
 	title,
 	editText,
+	disabled,
 	...rest
 }) => {
 	const [isEdit, setIsEdit] = useState(false);
 	const [text, setText] = useState(title);
 
 	const setEdit = () => {
-		setIsEdit(true);
+		!disabled && setIsEdit(true);
 	};
 
 	const editTaskTitle = () => {

@@ -1,13 +1,14 @@
-import { FC, useEffect, useState } from 'react';
-import { ShadowWrapper } from '../shadowWrapper/ShadowWrapper';
-import styled from 'styled-components';
-import { AddItemForm } from '../addItemForm/AddItemForm';
-import { FilterType } from '../../redux/reducers/todolistReducer';
-import { FilterMenu } from './filterMenu/FilterMenu';
-import { addTaskAC, getTasks } from '../../redux/reducers/tasksReducer';
-import { useAppDispatch, useAppSelector } from '../../redux/store/store';
 import { Task } from '../task/Task';
-import { TaskStatuses, TaskType } from '../../api/task-api';
+
+import { FC, useEffect, useState } from 'react';
+import { FilterMenu } from './filterMenu/FilterMenu';
+import { AddItemForm } from '../../components/addItemForm/AddItemForm';
+import { ShadowWrapper } from '../../components/shadowWrapper/ShadowWrapper';
+import { FilterType } from '../../bll/todolistReducer';
+import { addTaskTC, getTasksTC, TaskDomainType } from '../../bll/tasksReducer';
+import { TaskStatuses } from '../../api/task-api';
+import { useAppDispatch, useAppSelector } from '../../app/store';
+import styled from 'styled-components';
 
 type Props = {
 	todoId: string;
@@ -17,18 +18,18 @@ type Props = {
 export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 	const [openSettings, setOpenSettings] = useState(false);
 
-	let tasks = useAppSelector<TaskType[]>(state => state.tasks[todoId]);
+	let tasks = useAppSelector<TaskDomainType[]>(state => state.tasks[todoId]);
 	let dispatch = useAppDispatch();
 
 	useEffect(() => {
-		dispatch(getTasks(todoId));
-	}, []);
+		dispatch(getTasksTC(todoId));
+	}, [dispatch, todoId]);
 
 	const addTask = (text: string) => {
-		dispatch(addTaskAC(todoId, text));
+		dispatch(addTaskTC(todoId, text));
 	};
 
-	function filterTasks(filter: FilterType, tasks: TaskType[]) {
+	function filterTasks(filter: FilterType, tasks: TaskDomainType[]) {
 		if (filter === 'Completed') {
 			return tasks.filter(task => task.status === TaskStatuses.Completed);
 		}
@@ -42,6 +43,7 @@ export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 
 	return (
 		<ShadowWrapper>
+			{/*<Loader />*/}
 			<TodoWrapper>
 				<MenuAndFilter>
 					<small>
@@ -54,7 +56,7 @@ export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 						todoId={todoId}
 					/>
 				</MenuAndFilter>
-				<h2 style={{ color: 'brown' }}>{title}</h2>
+				<TodoHeading>{title}</TodoHeading>
 				<AddItemForm onClickFoo={addTask} />
 				{filteredTasks.map(task => (
 					<Task
@@ -63,6 +65,7 @@ export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 						status={task.status}
 						taskId={task.id}
 						todoId={todoId}
+						entityStatus={task.entityStatus}
 					/>
 				))}
 			</TodoWrapper>
@@ -70,6 +73,10 @@ export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 	);
 };
 
+//styles
+const TodoHeading = styled.h2`
+	color: brown;
+`;
 const TodoWrapper = styled.div`
 	position: relative;
 	width: 100%;
@@ -84,11 +91,4 @@ const TodoWrapper = styled.div`
 const FilterText = styled.b`
 	color: green;
 `;
-
-const MenuAndFilter = styled.div`
-	//& div div {
-	//	position: absolute;
-	//	top: 10px;
-	//	right: 10px;
-	//}
-`;
+const MenuAndFilter = styled.div``;

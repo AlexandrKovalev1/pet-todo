@@ -1,18 +1,20 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { RootStateType, store } from '../src/redux/store/store';
+import { RootStateType, store } from '../src/app/store';
 import { combineReducers, legacy_createStore } from 'redux';
-import { tasksReducer, TasksType } from '../src/redux/reducers/tasksReducer';
+import { tasksReducer, TasksType } from '../src/bll/tasksReducer';
 import {
 	todolistReducer,
 	TodolistDomainType,
-} from '../src/redux/reducers/todolistReducer';
+} from '../src/bll/todolistReducer';
 import { v1 } from 'uuid';
 import { TaskPriorities, TaskStatuses } from '../src/api/task-api';
+import { appReducer } from '../src/bll/appReducer';
 
 const rootReducer = combineReducers({
 	todoLists: todolistReducer,
 	tasks: tasksReducer,
+	app: appReducer,
 });
 
 let initialGlobalState: RootStateType = {
@@ -85,6 +87,10 @@ let initialGlobalState: RootStateType = {
 				deadline: '',
 			},
 		],
+	},
+	app: {
+		status: 'idle',
+		error: null,
 	},
 };
 

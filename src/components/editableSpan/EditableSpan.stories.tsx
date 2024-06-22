@@ -1,6 +1,6 @@
 import { EditableSpan } from './EditableSpan';
 import { Provider } from 'react-redux';
-import { store } from '../../redux/store/store';
+import { store } from '../../app/store';
 import { action } from '@storybook/addon-actions';
 import { ReduxStoreProviderDecorator } from '../../../.storybook/ReduxStoreProviderDecorator';
 import { useState } from 'react';

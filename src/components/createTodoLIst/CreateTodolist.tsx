@@ -1,14 +1,14 @@
+import styled from 'styled-components';
+import { useAppDispatch } from '../../app/store';
 import { AddItemForm } from '../addItemForm/AddItemForm';
 import { ShadowWrapper } from '../shadowWrapper/ShadowWrapper';
-import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { addTodoAC } from '../../redux/reducers/todolistReducer';
+import { addTodoTC } from '../../bll/todolistReducer';
 
 type Props = {};
 export const CreateTodolist = (props: Props) => {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const addTodo = (title: string) => {
-		dispatch(addTodoAC(title));
+		dispatch(addTodoTC(title));
 	};
 	return (
 		<ShadowWrapper>

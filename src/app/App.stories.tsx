@@ -1,6 +1,6 @@
 import { StoryObj } from '@storybook/react';
 import App from './App';
-import { ReduxStoreProviderDecorator } from '../.storybook/ReduxStoreProviderDecorator';
+import { ReduxStoreProviderDecorator } from '../../.storybook/ReduxStoreProviderDecorator';
 
 export default {
 	title: 'App',

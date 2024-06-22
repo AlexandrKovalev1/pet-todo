@@ -130,21 +130,21 @@ export const CreateTask = () => {
 		</>
 	);
 };
-export const UpdateTask = () => {
-	const [state, setState] = useState<any>(null);
-
-	useEffect(() => {
-		tasksApi
-			.updateTask(
-				'3c4d3e68-33c7-4601-955f-1bbace4a7ce2',
-				'e910e42a-92c6-44fc-98bb-c68acccae31e',
-				'updateddd',
-			)
-			.then(response => setState(response.data));
-	}, []);
-
-	return <div>{JSON.stringify(state)}</div>;
-};
+// export const UpdateTask = () => {
+// 	const [state, setState] = useState<any>(null);
+//
+// 	useEffect(() => {
+// 		tasksApi
+// 			.updateTask(
+// 				'3c4d3e68-33c7-4601-955f-1bbace4a7ce2',
+// 				'e910e42a-92c6-44fc-98bb-c68acccae31e',
+// 				'updateddd',
+// 			)
+// 			.then(response => setState(response.data));
+// 	}, []);
+//
+// 	return <div>{JSON.stringify(state)}</div>;
+// };
 export const DeleteTask = () => {
 	const [state, setState] = useState<any>(null);
 

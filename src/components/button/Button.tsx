@@ -20,6 +20,10 @@ const StyledButton = styled.button<Props>`
 	background-color: unset;
 	cursor: pointer;
 
+	&:disabled {
+		cursor: not-allowed;
+	}
+
 	${props =>
 		props.styleType === 'addTodo' &&
 		css<Props>`
