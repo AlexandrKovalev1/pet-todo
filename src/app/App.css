@@ -1,5 +1,6 @@
 .App{
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 80px 1fr;
+    height: 100vh;
 }

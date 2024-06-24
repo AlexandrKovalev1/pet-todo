@@ -1,18 +1,12 @@
 import { CreateTodolist } from '../../components/createTodoLIst/CreateTodolist';
 import { TodoList } from '../todoLIst/TodoList';
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '../../app/store';
-import { todolistSelector } from '../../selectors/selectors';
-import { getTodosTC } from '../../bll/todolistReducer';
+import { useFetchTodos } from './useFetchTodos';
 
 export const Todos = () => {
-	let todolists = useAppSelector(todolistSelector);
-	const dispatch = useAppDispatch();
+const {todolists} = useFetchTodos()
 
-	useEffect(() => {
-		dispatch(getTodosTC());
-	}, [dispatch]);
 	return (
 		<GridWrapper>
 			<CreateTodolist />
@@ -29,8 +23,8 @@ export const Todos = () => {
 };
 
 const GridWrapper = styled.div`
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(250px, min-content));
-	grid-auto-rows: auto;
-	grid-gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, min-content));
+    grid-auto-rows: auto;
+    grid-gap: 20px;
 `;

@@ -10,8 +10,13 @@ let initialState: AppStateType;
 describe('tests for appReducer', () => {
 	beforeEach(() => {
 		initialState = {
-			status: 'idle',
+			status: 'failed',
 			error: null,
+			isAuth: false,
+			id: null,
+			login: null,
+			email: null,
+			initialized:false
 		};
 	});
 

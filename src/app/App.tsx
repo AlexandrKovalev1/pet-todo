@@ -1,23 +1,30 @@
 import './App.css';
-import React from 'react';
+import React, { memo, useEffect } from 'react';
 import { Main } from '../layout/main/Main';
 import { Header } from '../layout/header/Header';
 import { Container } from '../components/container/Container';
-import { useAppSelector } from './store';
-import { Snackbar } from '../components/SnackBar/SnackBar';
-import { ProgressLinear } from '../components/ProgressLinear/ProgressLinear';
+import { useAppDispatch, useAppSelector } from './store';
 import { Outlet } from 'react-router-dom';
-import { Todos } from '../features/todos/Todos';
+import { initializeAppTC } from '../bll/appReducer';
+import { Sceleton } from '../components/sceleton/Sceleton';
+import { ToastContainer, toast } from 'react-toastify';
 
-function App() {
-	const error = useAppSelector(state => state.app.error);
-	const status = useAppSelector(state => state.app.status);
+const App = memo(() => {
+	const dispatch = useAppDispatch();
+	const initialized = useAppSelector(state => state.app.initialized);
+
+	useEffect(() => {
+		dispatch(initializeAppTC());
+	}, [dispatch]);
+
+	if (!initialized) {
+		return <Sceleton/>
+	}
 
 	return (
-		<div className='App'>
-			<Snackbar status={status} error={error} />
+		<div className="App">
+			<ToastContainer/>
 			<Header />
-			{status === 'loading' && <ProgressLinear />}
 			<Main>
 				<Container width={'1440px'}>
 					<Outlet />
@@ -25,6 +32,6 @@ function App() {
 			</Main>
 		</div>
 	);
-}
+});
 
 export default App;

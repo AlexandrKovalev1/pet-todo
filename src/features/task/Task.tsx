@@ -44,7 +44,7 @@ export const Task: FC<Props> = ({
 		dispatch(changeTaskTC(todoId, taskId, { title }));
 	};
 	return (
-		<Wrapper completed={taskIsCompleted} disabled={disable}>
+		<Wrapper $completed={taskIsCompleted} disabled={disable}>
 			<input
 				type='checkbox'
 				checked={taskIsCompleted}
@@ -69,7 +69,7 @@ export const Task: FC<Props> = ({
 	);
 };
 
-const Wrapper = styled.div<{ completed: boolean; disabled?: boolean }>`
+const Wrapper = styled.div<{ $completed: boolean; disabled?: boolean }>`
 	padding: 5px 15px;
 	display: flex;
 	align-items: center;
@@ -79,8 +79,8 @@ const Wrapper = styled.div<{ completed: boolean; disabled?: boolean }>`
 
 
 	${props =>
-		props.completed &&
-		css<{ completed: boolean }>`
+		props.$completed &&
+		css<{ $completed: boolean }>`
 			opacity: 0.5;
 		`}
 
@@ -94,7 +94,7 @@ const Wrapper = styled.div<{ completed: boolean; disabled?: boolean }>`
 
 	${props =>
 		props.disabled &&
-		css<{ completed: boolean; disabled?: boolean }>`
+		css<{ $completed: boolean; disabled?: boolean }>`
 			cursor: no-drop;
 			opacity: 0.4;
 			&:hover {

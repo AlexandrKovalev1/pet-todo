@@ -46,7 +46,7 @@ export const EditableSpan: FC<Props> = ({
 				/>
 			) : (
 				<StyledSpan
-					status={status === TaskStatuses.Completed}
+					$status={status === TaskStatuses.Completed}
 					onDoubleClick={setEdit}
 				>
 					{title}
@@ -56,14 +56,14 @@ export const EditableSpan: FC<Props> = ({
 	);
 };
 
-const StyledSpan = styled.span<{ status: boolean }>`
+const StyledSpan = styled.span<{ $status: boolean }>`
 	width: 100%;
 	text-align: center;
 	color: darkblue;
 	font-size: 1.7rem;
 	${props =>
-		props.status &&
-		css<{ status: boolean }>`
+		props.$status &&
+		css<{ $status: boolean }>`
 			text-decoration: line-through;
 		`}
 `;

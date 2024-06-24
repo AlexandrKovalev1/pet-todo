@@ -3,8 +3,8 @@ import { RequestStatusType, setStatusAC } from './appReducer';
 import { AppThunkType } from '../app/store';
 import { ResultCode } from '../api/task-api';
 import {
+	handleServerAppError,
 	handleServerNetworkError,
-	serverNetworkError,
 } from '../utils/error-utils';
 import axios, { AxiosError } from 'axios';
 
@@ -87,7 +87,13 @@ export const getTodosTC = (): AppThunkType => async dispatch => {
 		dispatch(setTodoListsAC(res.data));
 		dispatch(setStatusAC('succeeded'));
 		dispatch(setStatusAC('idle'));
-	} catch (e) {}
+	} catch (e) {
+		if (axios.isAxiosError(e)) {
+			handleServerNetworkError(dispatch, e.message);
+		} else {
+			handleServerNetworkError(dispatch, (e as Error).message);
+		}
+	}
 };
 
 export const addTodoTC =
@@ -100,7 +106,7 @@ export const addTodoTC =
 				dispatch(addTodoAC(res.data.data.item));
 				dispatch(setStatusAC('succeeded'));
 			} else {
-				serverNetworkError(dispatch, res.data);
+				handleServerAppError(dispatch, res.data);
 			}
 		} catch (e) {
 			if (axios.isAxiosError<ErrorCustomType>(e)) {
@@ -122,7 +128,7 @@ export const deleteTodoListTC =
 					dispatch(deleteTodoAC(todoId));
 					dispatch(setStatusAC('succeeded'));
 				} else {
-					serverNetworkError(dispatch, res.data);
+					handleServerAppError(dispatch, res.data);
 				}
 			})
 			.catch((e: AxiosError<ErrorCustomType>) => {

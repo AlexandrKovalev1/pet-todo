@@ -1,8 +1,8 @@
 import { setErrorAC, setStatusAC } from '../bll/appReducer';
 import { Dispatch } from 'redux';
-import { ResponseType } from '../api/todolists-api';
+import { ResponseType } from '../api/instance';
 
-export const serverNetworkError = <T>(
+export const handleServerAppError = <T>(
 	dispatch: Dispatch,
 	data: ResponseType<T>,
 ) => {
