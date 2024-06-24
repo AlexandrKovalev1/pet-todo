@@ -1,22 +1,23 @@
 import {
 	AddTodolistType,
 	DeleteTodoType,
-	SetTodoListsType,
+	SetTodoListsType
 } from './todolistReducer';
 import {
 	tasksApi,
 	TaskSettingType,
 	TaskType,
-	UpdateModelType,
+	UpdateModelType
 } from '../api/task-api';
-import { RequestStatusType, setStatusAC } from './appReducer';
+import { RequestStatusType, setErrorAC, setStatusAC } from './appReducer';
 import { Dispatch } from 'redux';
 import { RootStateType } from '../app/store';
+import axios from 'axios';
 
 let initialState: TasksType = {};
 export const tasksReducer = (
 	state: TasksType = initialState,
-	action: TasksActionType,
+	action: TasksActionType
 ): TasksType => {
 	switch (action.type) {
 		case 'ADD-TODOLIST': {
@@ -32,8 +33,8 @@ export const tasksReducer = (
 				...state,
 				[action.task.todoListId]: [
 					{ ...action.task, entityStatus: 'idle' },
-					...state[action.task.todoListId],
-				],
+					...state[action.task.todoListId]
+				]
 			};
 		}
 		case 'CHANGE-TASK': {
@@ -41,15 +42,15 @@ export const tasksReducer = (
 			return {
 				...state,
 				[todoId]: state[todoId].map(task =>
-					task.id === taskId ? { ...task, ...setting } : task,
-				),
+					task.id === taskId ? { ...task, ...setting } : task
+				)
 			};
 		}
 		case 'DELETE-TASK': {
 			let { taskId, todoId } = action;
 			return {
 				...state,
-				[todoId]: state[todoId].filter(task => task.id !== taskId),
+				[todoId]: state[todoId].filter(task => task.id !== taskId)
 			};
 		}
 		case 'SET-TODOLISTS': {
@@ -66,8 +67,8 @@ export const tasksReducer = (
 				...state,
 				[action.todoId]: action.tasks.map(task => ({
 					...task,
-					entityStatus: 'idle',
-				})),
+					entityStatus: 'idle'
+				}))
 			};
 		}
 		case 'TASK/SET_STATUS': {
@@ -76,11 +77,11 @@ export const tasksReducer = (
 				[action.todoId]: state[action.todoId].map(task =>
 					task.id === action.taskId
 						? {
-								...task,
-								entityStatus: action.status,
-							}
-						: task,
-				),
+							...task,
+							entityStatus: action.status
+						}
+						: task
+				)
 			};
 		}
 		default:
@@ -92,20 +93,20 @@ export const tasksReducer = (
 export const addTaskAC = (task: TaskType) => {
 	return {
 		type: 'ADD-TASK',
-		task,
+		task
 	} as const;
 };
 
 export const changeTaskAC = (
 	todoId: string,
 	taskId: string,
-	setting: TaskSettingType,
+	setting: TaskSettingType
 ) => {
 	return {
 		type: 'CHANGE-TASK',
 		todoId,
 		taskId,
-		setting,
+		setting
 	} as const;
 };
 
@@ -113,7 +114,7 @@ export const deleteTaskAC = (todoId: string, taskId: string) => {
 	return {
 		type: 'DELETE-TASK',
 		todoId,
-		taskId,
+		taskId
 	} as const;
 };
 
@@ -121,38 +122,50 @@ export const setTasksAc = (todoId: string, tasks: TaskType[]) => {
 	return {
 		type: 'SET-TASKS',
 		todoId,
-		tasks,
+		tasks
 	} as const;
 };
 export const setStatusTaskAC = (
 	todoId: string,
 	taskId: string,
-	status: RequestStatusType,
+	status: RequestStatusType
 ) => ({ type: 'TASK/SET_STATUS', status, todoId, taskId }) as const;
 
 //Thunk Creators
-export const getTasksTC = (todoId: string) => (dispatch: Dispatch) => {
+export const getTasksTC = (todoId: string) => async (dispatch: Dispatch) => {
 	dispatch(setStatusAC('loading'));
-	tasksApi
-		.getTasks(todoId)
-		.then(res => {
-			dispatch(setTasksAc(todoId, res.data.items));
-			dispatch(setStatusAC('succeeded'));
-		})
-		.finally(() => dispatch(setStatusAC('idle')));
+	try {
+		const res = await tasksApi.getTasks(todoId);
+		dispatch(setTasksAc(todoId, res.data.items));
+		dispatch(setStatusAC('succeeded'));
+	} catch (e) {
+		if (axios.isAxiosError(e)) {
+			dispatch(setErrorAC(e.message));
+		} else {
+			dispatch(setErrorAC((e as Error).message));
+		}
+	} finally {
+		dispatch(setStatusAC('idle'));
+	}
+
 };
 
 export const deleteTaskTC =
-	(todoId: string, taskId: string) => (dispatch: Dispatch) => {
-		dispatch(setStatusTaskAC(todoId, taskId, 'loading'));
-		tasksApi
-			.deleteTask(todoId, taskId)
-			.then(res => {
-				dispatch(deleteTaskAC(todoId, taskId));
-			})
-			.catch(e => {
-				dispatch(setStatusTaskAC(todoId, taskId, 'failed'));
-			});
+	(todoId: string, taskId: string) => async (dispatch: Dispatch) => {
+		dispatch(setStatusAC('loading'));
+		try {
+		await tasksApi.deleteTask(todoId, taskId);
+			dispatch(deleteTaskAC(todoId, taskId));
+			dispatch(setStatusAC('succeeded'));
+		} catch (e) {
+			if (axios.isAxiosError(e)) {
+				dispatch(setErrorAC(e.message));
+			} else {
+				dispatch(setErrorAC((e as Error).message));
+			}
+		} finally {
+			dispatch(setStatusAC('idle'));
+		}
 	};
 
 export const addTaskTC =
@@ -166,24 +179,38 @@ export const addTaskTC =
 				dispatch(setStatusAC('succeeded'));
 			})
 			.finally(() => dispatch(setStatusAC('idle')));
+
+
 	};
 
 export const changeTaskTC =
 	(todoId: string, taskId: string, setting: TaskSettingType) =>
-	async (dispatch: Dispatch, getState: () => RootStateType) => {
-		const tasks: TasksType = getState().tasks;
-		const task = tasks[todoId].find(task => task.id === taskId);
+		async (dispatch: Dispatch, getState: () => RootStateType) => {
+			const tasks: TasksType = getState().tasks;
+			const task = tasks[todoId].find(task => task.id === taskId);
 
-		if (!task) return;
+			if (!task) return;
 
-		let model: UpdateModelType = {
-			...task,
-			...setting,
+			let model: UpdateModelType = {
+				...task,
+				...setting
+			};
+
+			dispatch(setStatusAC('loading'));
+			try {
+				await tasksApi.updateTask(todoId, taskId, model);
+				dispatch(changeTaskAC(todoId, taskId, setting));
+				dispatch(setStatusAC('succeeded'));
+			} catch (e) {
+				if (axios.isAxiosError(e)) {
+					dispatch(setErrorAC(e.message));
+				} else {
+					dispatch(setErrorAC((e as Error).message));
+				}
+			} finally {
+				dispatch(setStatusAC('idle'));
+			}
 		};
-
-		await tasksApi.updateTask(todoId, taskId, model);
-		dispatch(changeTaskAC(todoId, taskId, setting));
-	};
 
 //types
 export type TaskDomainType = TaskType & {

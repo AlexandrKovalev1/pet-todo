@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../app/store';
 import React from 'react';
+import { selectAppStatus } from '../../selectors/selectors';
 
 type Props = {};
 export const ProgressLinear = (props: Props) => {
-	const status = useAppSelector(state => state.app.status);
+	const status = useAppSelector(selectAppStatus);
 
 	return (
 		<>

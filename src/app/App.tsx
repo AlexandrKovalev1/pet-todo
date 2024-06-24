@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from './store';
 import { Outlet } from 'react-router-dom';
 import { initializeAppTC } from '../bll/appReducer';
 import { Sceleton } from '../components/sceleton/Sceleton';
-import { ToastContainer, toast } from 'react-toastify';
+import { SnackBar } from '../components/snackBar/SnackBar';
 
 const App = memo(() => {
 	const dispatch = useAppDispatch();
@@ -17,13 +17,13 @@ const App = memo(() => {
 		dispatch(initializeAppTC());
 	}, [dispatch]);
 
-	if (!initialized) {
-		return <Sceleton/>
-	}
+	// if (!initialized) {
+	// 	return <Sceleton/>
+	// }
 
 	return (
 		<div className="App">
-			<ToastContainer/>
+			<SnackBar/>
 			<Header />
 			<Main>
 				<Container width={'1440px'}>

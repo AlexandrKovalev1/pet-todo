@@ -22,7 +22,7 @@ const publicRoutes: RouteObject[] = [
 		element: <Login />
 	}
 ];
-const privaleRoutes: RouteObject[] = [
+const privateRoutes: RouteObject[] = [
 	{
 		path: PATH.TODOS,
 		element: <Todos />
@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
 		children: [
 			{
 				element: <ProtectedRoute />,
-				children: privaleRoutes
+				children: privateRoutes
 			},
 			...publicRoutes
 		]

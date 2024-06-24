@@ -4,6 +4,7 @@ import styled from 'styled-components';
 type Props = {
 	children: ReactNode;
 };
+
 export const Main: FC<Props> = ({ children, ...rest }) => {
 	return <StyledMain>{children}</StyledMain>;
 };

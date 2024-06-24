@@ -19,11 +19,8 @@ export const appReducer = (
 ): AppStateType => {
 	switch (action.type) {
 		case 'SET_STATUS': {
-			if (action.status !== 'failed' && state.error) {
-				return { ...state, status: action.status, error: null };
-			} else {
 				return { ...state, status: action.status };
-			}
+
 		}
 		case 'SET_ISERROR': {
 			return { ...state, error: action.error };
@@ -54,7 +51,7 @@ export const appReducer = (
 export const setStatusAC = (status: RequestStatusType) =>
 	({ type: 'SET_STATUS', status }) as const;
 
-export const setErrorAC = (error: string) =>
+export const setErrorAC = (error: string|null) =>
 	({
 		type: 'SET_ISERROR',
 		error
@@ -101,7 +98,7 @@ export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch) => {
 		} else {
 			handleServerAppError(dispatch, res.data);
 		}
-	}).catch(e => handleServerNetworkError(dispatch, e));
+	}).catch(e => handleServerNetworkError(dispatch, e.message));
 };
 
 export const logoutTC = () => (dispatch: Dispatch) => {
