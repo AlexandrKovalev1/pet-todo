@@ -17,9 +17,9 @@ const App = memo(() => {
 		dispatch(initializeAppTC());
 	}, [dispatch]);
 
-	// if (!initialized) {
-	// 	return <Sceleton/>
-	// }
+	if (!initialized) {
+		return <Sceleton/>
+	}
 
 	return (
 		<div className="App">

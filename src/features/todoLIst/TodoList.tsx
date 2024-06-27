@@ -44,7 +44,7 @@ export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 				</MenuAndFilter>
 				<TodoHeading>{title}</TodoHeading>
 				<AddItemForm onClickFoo={addTask} />
-				{filteredTasks.map(task => (
+				{filteredTasks?.map(task => (
 					<Task
 						key={task.id}
 						title={task.title}

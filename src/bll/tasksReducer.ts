@@ -53,15 +53,15 @@ export const tasksReducer = (
 				[todoId]: state[todoId].filter(task => task.id !== taskId)
 			};
 		}
-		case 'SET-TODOLISTS': {
-			let copyState = { ...state };
-
-			action.todolists.forEach(tl => {
-				copyState[tl.id] = [];
-			});
-
-			return copyState;
-		}
+		// case 'SET-TODOLISTS': {
+		// 	let copyState = { ...state };
+		//
+		// 	action.todolists.forEach(tl => {
+		// 		copyState[tl.id] = [];
+		// 	});
+		//
+		// 	return copyState;
+		// }
 		case 'SET-TASKS': {
 			return {
 				...state,
@@ -152,11 +152,11 @@ export const getTasksTC = (todoId: string) => async (dispatch: Dispatch) => {
 
 export const deleteTaskTC =
 	(todoId: string, taskId: string) => async (dispatch: Dispatch) => {
-		dispatch(setStatusAC('loading'));
+		dispatch(setStatusTaskAC(todoId,taskId,'loading'));
 		try {
 		await tasksApi.deleteTask(todoId, taskId);
 			dispatch(deleteTaskAC(todoId, taskId));
-			dispatch(setStatusAC('succeeded'));
+			dispatch(setStatusTaskAC(todoId,taskId,'succeeded'));
 		} catch (e) {
 			if (axios.isAxiosError(e)) {
 				dispatch(setErrorAC(e.message));
@@ -164,7 +164,7 @@ export const deleteTaskTC =
 				dispatch(setErrorAC((e as Error).message));
 			}
 		} finally {
-			dispatch(setStatusAC('idle'));
+			dispatch(setStatusTaskAC(todoId,taskId,'idle'));
 		}
 	};
 
@@ -196,11 +196,12 @@ export const changeTaskTC =
 				...setting
 			};
 
-			dispatch(setStatusAC('loading'));
+			dispatch(setStatusTaskAC(todoId,taskId,'loading'));
 			try {
 				await tasksApi.updateTask(todoId, taskId, model);
 				dispatch(changeTaskAC(todoId, taskId, setting));
-				dispatch(setStatusAC('succeeded'));
+
+				dispatch(setStatusTaskAC(todoId,taskId,'succeeded'));
 			} catch (e) {
 				if (axios.isAxiosError(e)) {
 					dispatch(setErrorAC(e.message));
@@ -208,7 +209,7 @@ export const changeTaskTC =
 					dispatch(setErrorAC((e as Error).message));
 				}
 			} finally {
-				dispatch(setStatusAC('idle'));
+				dispatch(setStatusTaskAC(todoId,taskId,'idle'));
 			}
 		};
 

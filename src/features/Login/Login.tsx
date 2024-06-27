@@ -63,12 +63,10 @@ export const Login = (props: Props) => {
 				<Form onSubmit={formik.handleSubmit}>
 					<Input type="text"
 								 id="email"
-								 name="email"
 								 placeholder="Email"
 								 required
-								 value={formik.values.email}
-								 onChange={formik.handleChange}
 								 $error={!!formik.errors.email}
+								 {...formik.getFieldProps('email')}
 
 					/>
 					{formik.touched.email && formik.errors.email &&
@@ -76,13 +74,11 @@ export const Login = (props: Props) => {
 					<Input
 						type="password"
 						id="password"
-						name="password"
 						placeholder="Password"
 						autoComplete={'on'}
 						required
-						value={formik.values.password}
-						onChange={formik.handleChange}
 						$error={!!formik.errors.password}
+						{...formik.getFieldProps('password')}
 					/>
 					{formik.touched.password && formik.errors.password &&
 						<ErrorBlock>{formik.errors.password}</ErrorBlock>}
@@ -93,9 +89,8 @@ export const Login = (props: Props) => {
 							<input
 								type={'checkbox'}
 								id={'rememberMe'}
-								name={'rememberMe'}
 								checked={formik.values.rememberMe}
-								onChange={formik.handleChange}
+								{...formik.getFieldProps('rememberMe')}
 							/></Label>
 					</div>
 				</Form>

@@ -4,22 +4,28 @@ import { Todos } from '../features/todos/Todos';
 import { Login } from '../features/Login/Login';
 import { useAppSelector } from '../app/store';
 import * as React from 'react';
+import { ErrorPage } from '../components/ErrorPage/ErrorPage';
 
 export const PATH = {
 	ROOT: '/',
 	TODOS: '/todolists',
-	LOGIN: '/login'
+	LOGIN: '/login',
+	ERROR:'/error'
 } as const;
 
 
 const publicRoutes: RouteObject[] = [
 	{
-		path: PATH.ROOT,
+		index:true,
 		element: <Navigate to={PATH.TODOS} />
 	},
 	{
 		path: PATH.LOGIN,
 		element: <Login />
+	},
+	{
+		path:PATH.ERROR,
+		element: <ErrorPage/>
 	}
 ];
 const privateRoutes: RouteObject[] = [
@@ -38,7 +44,7 @@ export const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <App />,
-		errorElement: <>Error</>,
+		errorElement:<Navigate to={PATH.ERROR}/>,
 		children: [
 			{
 				element: <ProtectedRoute />,

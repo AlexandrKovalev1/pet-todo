@@ -1,5 +1,4 @@
 import { RootStateType } from '../app/store';
-import { TodolistDomainType } from '../bll/todolistReducer';
 
 export const selectTodolists = (state: RootStateType) => state.todoLists;
 export const selectAppStatus = (state: RootStateType) => state.app.status;
