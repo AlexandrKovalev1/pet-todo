@@ -5,13 +5,13 @@ type Props = {};
 export const ErrorPage = (props: Props) => {
 	return (
 		<StyledWrapper>
-			<img src={bg} alt="" />
+			<img src={bg} alt='' />
 		</StyledWrapper>
 	);
 };
 
 const StyledWrapper = styled.div`
-& img {
-    width: 100%;
-}
+	& img {
+		width: 100%;
+	}
 `;

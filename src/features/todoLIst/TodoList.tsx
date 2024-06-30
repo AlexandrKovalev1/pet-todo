@@ -2,11 +2,11 @@ import { Task } from '../task/Task';
 import styled from 'styled-components';
 import { FC, useState } from 'react';
 import { FilterMenu } from './filterMenu/FilterMenu';
-import { FilterType } from '../../bll/todolistReducer';
+import { FilterType } from 'bll/todolistSlice';
 import { useAppDispatch } from '../../app/store';
 import { AddItemForm } from '../../components/addItemForm/AddItemForm';
 import { ShadowWrapper } from '../../components/shadowWrapper/ShadowWrapper';
-import { addTaskTC } from '../../bll/tasksReducer';
+import { addTaskTC } from 'bll/tasksSlice';
 import { filterTasks } from '../../utils/filterTasks';
 import { useFetchTasks } from './useFetchTasks';
 
@@ -35,12 +35,7 @@ export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 					<small>
 						Filter:<FilterText>{filter}</FilterText>
 					</small>
-					<FilterMenu
-						active={openSettings}
-						setActive={setOpenSettings}
-						filter={filter}
-						todoId={todoId}
-					/>
+					<FilterMenu active={openSettings} setActive={setOpenSettings} filter={filter} todoId={todoId} />
 				</MenuAndFilter>
 				<TodoHeading>{title}</TodoHeading>
 				<AddItemForm onClickFoo={addTask} />
@@ -61,20 +56,20 @@ export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 
 //styled Components
 const TodoHeading = styled.h2`
-    color: brown;
+	color: brown;
 `;
 const TodoWrapper = styled.div`
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 0;
-    gap: 10px;
-    border-radius: 7px;
-    background-color: rgba(255, 255, 255, 0.6);
+	position: relative;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 10px 0;
+	gap: 10px;
+	border-radius: 7px;
+	background-color: rgba(255, 255, 255, 0.6);
 `;
 const FilterText = styled.b`
-    color: green;
+	color: green;
 `;
 const MenuAndFilter = styled.div``;

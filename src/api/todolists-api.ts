@@ -1,4 +1,4 @@
-import {  ResponseType } from './instance';
+import { ResponseType } from './instance';
 //todoListApi CRUD object
 import { instance } from './instance';
 
@@ -29,5 +29,3 @@ export type TodolistType = {
 	addedDate: string;
 	order: number;
 };
-
-

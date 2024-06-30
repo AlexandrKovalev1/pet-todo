@@ -2,11 +2,11 @@ import { ChangeEvent, FC } from 'react';
 import styled, { css } from 'styled-components';
 import { Button } from '../../components/button/Button';
 import { Icon } from '../../components/icon/Icon';
-import { changeTaskTC, deleteTaskTC } from '../../bll/tasksReducer';
+import { changeTaskTC, deleteTaskTC } from 'bll/tasksSlice';
 import { EditableSpan } from '../../components/editableSpan/EditableSpan';
 import { TaskStatuses } from '../../api/task-api';
 import { useAppDispatch } from '../../app/store';
-import { RequestStatusType } from '../../bll/appReducer';
+import { RequestStatusType } from 'bll/appSlice';
 
 type Props = {
 	title: string;
@@ -15,14 +15,7 @@ type Props = {
 	todoId: string;
 	entityStatus: RequestStatusType;
 };
-export const Task: FC<Props> = ({
-	title,
-	status,
-	taskId,
-	todoId,
-	entityStatus,
-	...rest
-}) => {
+export const Task: FC<Props> = ({ title, status, taskId, todoId, entityStatus, ...rest }) => {
 	let dispatch = useAppDispatch();
 
 	let disable = entityStatus === 'loading';
@@ -33,9 +26,7 @@ export const Task: FC<Props> = ({
 	};
 
 	const changeTask = (e: ChangeEvent<HTMLInputElement>) => {
-		let status = e.currentTarget.checked
-			? TaskStatuses.Completed
-			: TaskStatuses.New;
+		let status = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New;
 
 		dispatch(changeTaskTC(todoId, taskId, { status }));
 	};
@@ -45,25 +36,10 @@ export const Task: FC<Props> = ({
 	};
 	return (
 		<Wrapper $completed={taskIsCompleted} disabled={disable}>
-			<input
-				type='checkbox'
-				checked={taskIsCompleted}
-				onChange={changeTask}
-				disabled={disable}
-			/>
-			<EditableSpan
-				status={status}
-				title={title}
-				editText={editTaskTitle}
-				disabled={disable}
-			/>
+			<input type='checkbox' checked={taskIsCompleted} onChange={changeTask} disabled={disable} />
+			<EditableSpan status={status} title={title} editText={editTaskTitle} disabled={disable} />
 			<Button styleType={'remove'} onClick={deleteTask} disabled={disable}>
-				<Icon
-					iconId={'iconTrash'}
-					viewBox={'0 0 18 22'}
-					width={'18px'}
-					height={'22px'}
-				/>
+				<Icon iconId={'iconTrash'} viewBox={'0 0 18 22'} width={'18px'} height={'22px'} />
 			</Button>
 		</Wrapper>
 	);

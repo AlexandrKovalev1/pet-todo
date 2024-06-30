@@ -10,13 +10,7 @@ type Props = {
 };
 
 //todo -приделать обработку ошибок
-export const EditableSpan: FC<Props> = ({
-	status,
-	title,
-	editText,
-	disabled,
-	...rest
-}) => {
+export const EditableSpan: FC<Props> = ({ status, title, editText, disabled, ...rest }) => {
 	const [isEdit, setIsEdit] = useState(false);
 	const [text, setText] = useState(title);
 
@@ -37,18 +31,9 @@ export const EditableSpan: FC<Props> = ({
 	return (
 		<>
 			{isEdit ? (
-				<input
-					type='text'
-					value={text}
-					autoFocus
-					onBlur={editTaskTitle}
-					onChange={onChangeHandler}
-				/>
+				<input type='text' value={text} autoFocus onBlur={editTaskTitle} onChange={onChangeHandler} />
 			) : (
-				<StyledSpan
-					$status={status === TaskStatuses.Completed}
-					onDoubleClick={setEdit}
-				>
+				<StyledSpan $status={status === TaskStatuses.Completed} onDoubleClick={setEdit}>
 					{title}
 				</StyledSpan>
 			)}

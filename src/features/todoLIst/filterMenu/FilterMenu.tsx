@@ -1,13 +1,9 @@
 import { FC } from 'react';
-import { Button } from '../../../components/button/Button';
-import { Icon } from '../../../components/icon/Icon';
 import styled from 'styled-components';
-import {
-	deleteTodoListTC,
-	FilterType,
-	setFilterTodolistAC,
-} from '../../../bll/todolistReducer';
-import { useAppDispatch } from '../../../app/store';
+import { useAppDispatch } from 'app/store';
+import { Icon } from 'components/icon/Icon';
+import { Button } from 'components/button/Button';
+import { deleteTodoListTC, FilterType, todolistActions } from 'bll/todolistSlice';
 
 type Props = {
 	active: boolean;
@@ -15,74 +11,41 @@ type Props = {
 	filter: FilterType;
 	todoId: string;
 };
-export const FilterMenu: FC<Props> = ({
-	active,
-	setActive,
-	filter,
-	todoId,
-	...rest
-}) => {
+export const FilterMenu: FC<Props> = ({ active, setActive, filter, todoId, ...rest }) => {
 	const dispatch = useAppDispatch();
 	const deleteTodo = () => dispatch(deleteTodoListTC(todoId));
 	const setOpen = () => setActive(true);
 	const setClose = () => setActive(false);
 
-	const setFilterAll = () => dispatch(setFilterTodolistAC(todoId, 'All'));
-	const setFilterActive = () => dispatch(setFilterTodolistAC(todoId, 'Active'));
+	const setFilterAll = () => dispatch(todolistActions.setFilterTodolist({ todoId, filter: 'All' }));
+	const setFilterActive = () => dispatch(todolistActions.setFilterTodolist({ todoId, filter: 'Active' }));
 
-	const setFilterCompleted = () =>
-		dispatch(setFilterTodolistAC(todoId, 'Completed'));
+	const setFilterCompleted = () => dispatch(todolistActions.setFilterTodolist({ todoId, filter: 'Completed' }));
 
 	return (
 		<Wrapper>
 			{!active && (
 				<MenuIconWrapper onClick={setOpen}>
-					<Icon
-						iconId={'filterMenu'}
-						viewBox={'0 0 4 15'}
-						width={'4px'}
-						height={'15px'}
-					/>
+					<Icon iconId={'filterMenu'} viewBox={'0 0 4 15'} width={'4px'} height={'15px'} />
 				</MenuIconWrapper>
 			)}
 			{active && (
 				<MenuBodyWrapper>
 					<BtnClose onClick={setClose}>
-						<Icon
-							iconId={'closeIcon'}
-							viewBox={'0 0 24 24'}
-							width={'15px'}
-							height={'15px'}
-						/>
+						<Icon iconId={'closeIcon'} viewBox={'0 0 24 24'} width={'15px'} height={'15px'} />
 					</BtnClose>
 					<h3>Change filter</h3>
-					<Button
-						styleType={'filter'}
-						active={filter === 'All'}
-						onClick={setFilterAll}
-					>
+					<Button styleType={'filter'} active={filter === 'All'} onClick={setFilterAll}>
 						All
 					</Button>
-					<Button
-						styleType={'filter'}
-						active={filter === 'Active'}
-						onClick={setFilterActive}
-					>
+					<Button styleType={'filter'} active={filter === 'Active'} onClick={setFilterActive}>
 						Active
 					</Button>
-					<Button
-						styleType={'filter'}
-						active={filter === 'Completed'}
-						onClick={setFilterCompleted}
-					>
+					<Button styleType={'filter'} active={filter === 'Completed'} onClick={setFilterCompleted}>
 						Completed
 					</Button>
 					<h3>Delete todolist</h3>
-					<Button
-						styleType={'filter'}
-						className={'delete-todo'}
-						onClick={deleteTodo}
-					>
+					<Button styleType={'filter'} className={'delete-todo'} onClick={deleteTodo}>
 						Delete todolist
 					</Button>
 				</MenuBodyWrapper>

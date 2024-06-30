@@ -5,38 +5,38 @@ import { Login } from '../features/Login/Login';
 import { useAppSelector } from '../app/store';
 import * as React from 'react';
 import { ErrorPage } from '../components/ErrorPage/ErrorPage';
+import { selectIsAuth } from '../selectors/selectors';
 
 export const PATH = {
 	ROOT: '/',
 	TODOS: '/todolists',
 	LOGIN: '/login',
-	ERROR:'/error'
+	ERROR: '/error',
 } as const;
-
 
 const publicRoutes: RouteObject[] = [
 	{
-		index:true,
-		element: <Navigate to={PATH.TODOS} />
+		index: true,
+		element: <Navigate to={PATH.TODOS} />,
 	},
 	{
 		path: PATH.LOGIN,
-		element: <Login />
+		element: <Login />,
 	},
 	{
-		path:PATH.ERROR,
-		element: <ErrorPage/>
-	}
+		path: PATH.ERROR,
+		element: <ErrorPage />,
+	},
 ];
 const privateRoutes: RouteObject[] = [
 	{
 		path: PATH.TODOS,
-		element: <Todos />
-	}
+		element: <Todos />,
+	},
 ];
 
 const ProtectedRoute = () => {
-	const isAuth = useAppSelector<boolean>(state => state.app.isAuth);
+	const isAuth = useAppSelector<boolean>(selectIsAuth);
 	return isAuth ? <Outlet /> : <Navigate to={PATH.LOGIN} />;
 };
 
@@ -44,13 +44,13 @@ export const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <App />,
-		errorElement:<Navigate to={PATH.ERROR}/>,
+		errorElement: <Navigate to={PATH.ERROR} />,
 		children: [
 			{
 				element: <ProtectedRoute />,
-				children: privateRoutes
+				children: privateRoutes,
 			},
-			...publicRoutes
-		]
-	}
+			...publicRoutes,
+		],
+	},
 ]);

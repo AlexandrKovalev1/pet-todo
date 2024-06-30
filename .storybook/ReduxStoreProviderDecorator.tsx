@@ -2,19 +2,16 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { RootStateType, store } from '../src/app/store';
 import { combineReducers, legacy_createStore } from 'redux';
-import { tasksReducer, TasksType } from '../src/bll/tasksReducer';
-import {
-	todolistReducer,
-	TodolistDomainType,
-} from '../src/bll/todolistReducer';
+import { tasksSlice, TasksType } from 'bll/tasksSlice';
+import { todolistSlice, TodolistDomainType } from 'bll/todolistSlice';
 import { v1 } from 'uuid';
 import { TaskPriorities, TaskStatuses } from '../src/api/task-api';
-import { appReducer } from '../src/bll/appReducer';
+import { appSlice } from 'bll/appSlice';
 
 const rootReducer = combineReducers({
-	todoLists: todolistReducer,
-	tasks: tasksReducer,
-	app: appReducer,
+	todoLists: todolistSlice,
+	tasks: tasksSlice,
+	app: appSlice,
 });
 
 let initialGlobalState: RootStateType = {
@@ -95,10 +92,7 @@ let initialGlobalState: RootStateType = {
 };
 
 //@ts-ignore
-export const storyBookStore = legacy_createStore(
-	rootReducer,
-	initialGlobalState as RootStateType,
-);
+export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState as RootStateType);
 
 export const ReduxStoreProviderDecorator = (storyFn: () => React.ReactNode) => {
 	return <Provider store={storyBookStore}>{storyFn()}</Provider>;

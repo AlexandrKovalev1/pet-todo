@@ -30,24 +30,12 @@ export const Example: Story = {
 };
 export const TaskNotIsDone = () => (
 	<Provider store={store}>
-		<Task
-			title={'First story'}
-			status={TaskStatuses.New}
-			taskId={'1'}
-			todoId={'1'}
-			entityStatus={'idle'}
-		/>
+		<Task title={'First story'} status={TaskStatuses.New} taskId={'1'} todoId={'1'} entityStatus={'idle'} />
 	</Provider>
 );
 
 export const TaskIsDone = () => (
 	<Provider store={store}>
-		<Task
-			title={'Second story'}
-			status={TaskStatuses.Completed}
-			taskId={'2'}
-			todoId={'1'}
-			entityStatus={'idle'}
-		/>
+		<Task title={'Second story'} status={TaskStatuses.Completed} taskId={'2'} todoId={'1'} entityStatus={'idle'} />
 	</Provider>
 );

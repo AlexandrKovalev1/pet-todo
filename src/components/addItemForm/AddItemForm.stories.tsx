@@ -10,6 +10,4 @@ export default {
 };
 
 let callback = action('text');
-export const AddItemFormBaseExample = () => (
-	<AddItemForm onClickFoo={callback} />
-);
+export const AddItemFormBaseExample = () => <AddItemForm onClickFoo={callback} />;

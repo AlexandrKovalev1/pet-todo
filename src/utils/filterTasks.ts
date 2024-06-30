@@ -1,5 +1,5 @@
-import { FilterType } from '../bll/todolistReducer';
-import { TaskDomainType } from '../bll/tasksReducer';
+import { FilterType } from 'bll/todolistSlice';
+import { TaskDomainType } from 'bll/tasksSlice';
 import { TaskStatuses } from '../api/task-api';
 
 export function filterTasks(filter: FilterType, tasks: TaskDomainType[]) {

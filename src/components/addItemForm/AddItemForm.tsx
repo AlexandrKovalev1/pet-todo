@@ -50,11 +50,7 @@ export const AddItemForm: FC<Props> = ({ onClickFoo, disabled, ...rest }) => {
 					error={error}
 					disabled={disabled}
 				/>
-				<Button
-					styleType={'addTodo'}
-					onClick={onClickHandler}
-					disabled={!text || !!error || disabled}
-				>
+				<Button styleType={'addTodo'} onClick={onClickHandler} disabled={!text || !!error || disabled}>
 					+
 				</Button>
 			</InputBlock>

@@ -7,13 +7,7 @@ type IconPropsType = {
 	height?: string;
 	viewBox?: string;
 };
-export const Icon: FC<IconPropsType> = ({
-	width,
-	height,
-	viewBox,
-	iconId,
-	...props
-}) => {
+export const Icon: FC<IconPropsType> = ({ width, height, viewBox, iconId, ...props }) => {
 	return (
 		<svg
 			width={width || '50'}

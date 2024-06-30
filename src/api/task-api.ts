@@ -1,4 +1,4 @@
-import {  ResponseType } from './instance';
+import { ResponseType } from './instance';
 import { instance } from './instance';
 
 export const tasksApi = {
@@ -6,21 +6,13 @@ export const tasksApi = {
 		return instance.get<GetTasksResponseType>(`todo-lists/${id}/tasks`);
 	},
 	createTask(id: string, title: string) {
-		return instance.post<ResponseType<{ item: TaskType }>>(
-			`todo-lists/${id}/tasks`,
-			{ title },
-		);
+		return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${id}/tasks`, { title });
 	},
 	updateTask(todoId: string, taskId: string, model: UpdateModelType) {
-		return instance.put<ResponseType<{ item: TaskType }>>(
-			`todo-lists/${todoId}/tasks/${taskId}`,
-			model,
-		);
+		return instance.put<ResponseType<{ item: TaskType }>>(`todo-lists/${todoId}/tasks/${taskId}`, model);
 	},
 	deleteTask(todoId: string, taskId: string) {
-		return instance.delete<ResponseType>(
-			`todo-lists/${todoId}/tasks/${taskId}`,
-		);
+		return instance.delete<ResponseType>(`todo-lists/${todoId}/tasks/${taskId}`);
 	},
 };
 

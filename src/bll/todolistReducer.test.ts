@@ -1,12 +1,4 @@
-import {
-	addTodoAC,
-	editTitleTodoAC,
-	deleteTodoAC,
-	setFilterTodolistAC,
-	todolistReducer,
-	TodolistDomainType,
-	setTodoListsAC,
-} from './todolistReducer';
+import { todolistActions, TodolistDomainType, todolistSlice } from 'bll/todolistSlice';
 import { v4 } from 'uuid';
 import { TodolistType } from '../api/todolists-api';
 
@@ -33,37 +25,37 @@ describe('reducer test', () => {
 
 	// it('should be add todo', () => {
 	// 	let action = addTodoAC('New Todo');
-	// 	let newState = todolistReducer(initState, action);
+	// 	let newState = todolistSlice(initState, action);
 	//
 	// 	expect(newState.length).toBe(2);
 	// 	expect(newState[1].title).toBe('New Todo');
 	// });
 
 	it('should be removed todo', () => {
-		let action = deleteTodoAC(initState[0].id);
+		let action = todolistActions.deleteTodo({ todoId: initState[0].id });
 
-		let newState = todolistReducer(initState, action);
+		let newState = todolistSlice(initState, action);
 		expect(newState.length).toBe(0);
 	});
 
 	it('should be update heading todo', () => {
-		let action = editTitleTodoAC(initState[0].id, 'First TodoList');
-		let newState = todolistReducer(initState, action);
+		let action = todolistActions.editTitleTodo({ todoId: initState[0].id, newTitle: 'First TodoList' });
+		let newState = todolistSlice(initState, action);
 
 		expect(newState[0].title).toBe('First TodoList');
 	});
 
 	it('should be update filter from todo', () => {
-		let action = setFilterTodolistAC(initState[0].id, 'Active');
-		let newState = todolistReducer(initState, action);
+		let action = todolistActions.setFilterTodolist({ todoId: initState[0].id, filter: 'Active' });
+		let newState = todolistSlice(initState, action);
 
 		expect(newState.length).toBe(1);
 		expect(newState[0].filter).toBe('Active');
 	});
 
 	it('todolists should be set to the state', () => {
-		let action = setTodoListsAC(todolists);
-		let newState = todolistReducer(initState, action);
+		let action = todolistActions.setTodoLists({ todolists });
+		let newState = todolistSlice(initState, action);
 
 		expect(newState.length).toBe(2);
 		expect(newState[0].filter).toBeDefined();

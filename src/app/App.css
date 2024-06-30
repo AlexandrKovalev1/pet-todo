@@ -1,6 +1,6 @@
-.App{
-    position: relative;
-    display: grid;
-    grid-template-rows: 80px 1fr;
-    height: 100vh;
+.App {
+	position: relative;
+	display: grid;
+	grid-template-rows: 80px 1fr;
+	height: 100vh;
 }

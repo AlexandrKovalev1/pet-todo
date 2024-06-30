@@ -1,23 +1,17 @@
-import { setErrorAC, setStatusAC } from '../bll/appReducer';
 import { Dispatch } from 'redux';
-import { ResponseType } from '../api/instance';
+import { ResponseType } from 'api/instance';
+import { appActions } from 'bll/appSlice';
 
-export const handleServerAppError = <T>(
-	dispatch: Dispatch,
-	data: ResponseType<T>,
-) => {
+export const handleServerAppError = <T>(dispatch: Dispatch, data: ResponseType<T>) => {
 	if (data.messages.length) {
-		dispatch(setErrorAC(data.messages[0]));
+		dispatch(appActions.setError({ error: data.messages[0] }));
 	} else {
-		dispatch(setErrorAC('Something went wrong'));
+		dispatch(appActions.setError({ error: 'Something went wrong' }));
 	}
-	dispatch(setStatusAC('failed'));
+	dispatch(appActions.setStatus({ status: 'failed' }));
 };
 
-export const handleServerNetworkError = (
-	dispatch: Dispatch,
-	message: string,
-) => {
-	dispatch(setStatusAC('failed'));
-	dispatch(setErrorAC(message));
+export const handleServerNetworkError = (dispatch: Dispatch, message: string) => {
+	dispatch(appActions.setStatus({ status: 'failed' }));
+	dispatch(appActions.setError({ error: message }));
 };

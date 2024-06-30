@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useAppDispatch } from '../../app/store';
 import { AddItemForm } from '../addItemForm/AddItemForm';
 import { ShadowWrapper } from '../shadowWrapper/ShadowWrapper';
-import { addTodoTC } from '../../bll/todolistReducer';
+import { addTodoTC } from 'bll/todolistSlice';
 
 type Props = {};
 export const CreateTodolist = (props: Props) => {

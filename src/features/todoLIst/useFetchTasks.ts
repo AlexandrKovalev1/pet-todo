@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../app/store';
-import { getTasksTC, TaskDomainType } from '../../bll/tasksReducer';
+import { getTasksTC, TaskDomainType } from 'bll/tasksSlice';
 import { useEffect } from 'react';
 
 export const useFetchTasks = (todoId: string) => {
@@ -11,6 +11,6 @@ export const useFetchTasks = (todoId: string) => {
 	}, [dispatch, todoId]);
 
 	return {
-		tasks
+		tasks,
 	};
 };
