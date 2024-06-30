@@ -21,7 +21,6 @@ const slice = createSlice({
 	reducers: {
 		addTask(state, action: PayloadAction<{ task: TaskType }>) {
 			state[action.payload.task.todoListId].unshift({ ...action.payload.task, entityStatus: 'idle' });
-			// return state;
 		},
 		changeTask(
 			state,
@@ -69,6 +68,9 @@ const slice = createSlice({
 		});
 		builder.addCase(todolistActions.addTodo, (state, action) => {
 			state[action.payload.todolist.id] = [];
+		});
+		builder.addCase(todolistActions.clearTodos, (state, action) => {
+			return {};
 		});
 	},
 });

@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { useAppSelector } from '../../app/store';
 import React from 'react';
-import { selectAppStatus } from '../../selectors/selectors';
+import styled from 'styled-components';
+import { useAppSelector } from 'app/store';
+import { selectAppStatus } from 'bll/appSlice';
 
 type Props = {};
 export const ProgressLinear = (props: Props) => {

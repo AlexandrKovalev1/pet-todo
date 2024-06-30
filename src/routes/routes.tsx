@@ -1,11 +1,10 @@
-import { createBrowserRouter, Navigate, RouteObject, Outlet } from 'react-router-dom';
 import App from '../app/App';
-import { Todos } from '../features/todos/Todos';
-import { Login } from '../features/Login/Login';
-import { useAppSelector } from '../app/store';
-import * as React from 'react';
-import { ErrorPage } from '../components/ErrorPage/ErrorPage';
-import { selectIsAuth } from '../selectors/selectors';
+import { useAppSelector } from 'app/store';
+import { Todos } from 'features/todos/Todos';
+import { Login } from 'features/Login/Login';
+import { ErrorPage } from 'components/ErrorPage/ErrorPage';
+import { createBrowserRouter, Navigate, RouteObject, Outlet } from 'react-router-dom';
+import { selectIsAuth } from 'bll/authSlice';
 
 export const PATH = {
 	ROOT: '/',

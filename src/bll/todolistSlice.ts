@@ -5,6 +5,7 @@ import { appActions, RequestStatusType } from 'bll/appSlice';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { todolistsApi, TodolistType } from 'api/todolists-api';
 import { handleServerAppError, handleServerNetworkError } from 'utils/error-utils';
+import { getTasksTC } from 'bll/tasksSlice';
 
 type ErrorCustomType = {
 	statusCode: 0;
@@ -25,7 +26,7 @@ export type FilterType = 'All' | 'Active' | 'Completed';
 const initialState = [] as TodolistDomainType[];
 
 const slice = createSlice({
-	name: 'todolists',
+	name: 'todoLists',
 	initialState,
 	reducers: {
 		setTodoLists(state, action: PayloadAction<{ todolists: TodolistType[] }>) {
@@ -52,6 +53,12 @@ const slice = createSlice({
 				state.splice(index, 1);
 			}
 		},
+		clearTodos(state, action: PayloadAction) {
+			return [];
+		},
+	},
+	selectors: {
+		selectTodoLists: state => state,
 	},
 });
 
@@ -62,6 +69,9 @@ export const getTodosTC = (): AppThunkType => async dispatch => {
 		dispatch(todolistActions.setTodoLists({ todolists: res.data }));
 		dispatch(appActions.setStatus({ status: 'succeeded' }));
 		dispatch(appActions.setStatus({ status: 'idle' }));
+		res.data.forEach(tl => {
+			dispatch(getTasksTC(tl.id));
+		});
 	} catch (e) {
 		if (axios.isAxiosError(e)) {
 			handleServerNetworkError(dispatch, e.message);
@@ -113,3 +123,4 @@ export const deleteTodoListTC =
 
 export const todolistActions = slice.actions;
 export const todolistSlice = slice.reducer;
+export const { selectTodoLists } = slice.selectors;

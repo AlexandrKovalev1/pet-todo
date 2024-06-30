@@ -1,8 +1,8 @@
-import { CreateTodolist } from '../../components/createTodoLIst/CreateTodolist';
-import { TodoList } from '../todoLIst/TodoList';
 import React from 'react';
 import styled from 'styled-components';
 import { useFetchTodos } from './useFetchTodos';
+import { TodoList } from '../todoLIst/TodoList';
+import { CreateTodolist } from 'components/createTodoLIst/CreateTodolist';
 
 export const Todos = () => {
 	const { todolists } = useFetchTodos();

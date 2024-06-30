@@ -1,16 +1,13 @@
-// @flow
-import * as React from 'react';
-import { toast, ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from 'app/store';
 import 'react-toastify/dist/ReactToastify.css';
-import { appActions } from 'bll/appSlice';
+import { toast, ToastContainer } from 'react-toastify';
+import { appActions, selectError } from 'bll/appSlice';
+import { useAppDispatch, useAppSelector } from 'app/store';
 
 type Props = {};
 export const SnackBar = (props: Props) => {
-	const errorMessage = useAppSelector(state => state.app.error);
+	const errorMessage = useAppSelector(selectError);
 
-	console.log(errorMessage);
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {

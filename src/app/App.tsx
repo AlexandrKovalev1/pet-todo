@@ -1,17 +1,17 @@
 import './App.css';
-import React, { memo, useEffect } from 'react';
 import { Main } from 'layout/main/Main';
-import { Header } from 'layout/header/Header';
-import { Container } from 'components/container/Container';
-import { useAppDispatch, useAppSelector } from './store';
 import { Outlet } from 'react-router-dom';
-import { initializeAppTC } from 'bll/appSlice';
+import { Header } from 'layout/header/Header';
+import React, { memo, useEffect } from 'react';
 import { Sceleton } from 'components/sceleton/Sceleton';
 import { SnackBar } from 'components/snackBar/SnackBar';
+import { useAppDispatch, useAppSelector } from './store';
+import { Container } from 'components/container/Container';
+import { initializeAppTC, selectIsInitialized } from 'bll/appSlice';
 
 const App = memo(() => {
 	const dispatch = useAppDispatch();
-	const initialized = useAppSelector(state => state.app.initialized);
+	const initialized = useAppSelector(selectIsInitialized);
 
 	useEffect(() => {
 		dispatch(initializeAppTC());

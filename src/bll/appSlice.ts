@@ -2,6 +2,7 @@ import { Dispatch } from 'redux';
 import { authApi } from 'api/auth-api';
 import { ResultCode } from 'api/task-api';
 import { authActions } from 'bll/authSlice';
+import { todolistActions } from 'bll/todolistSlice';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { handleServerAppError, handleServerNetworkError } from 'utils/error-utils';
 
@@ -47,6 +48,17 @@ const slice = createSlice({
 		setAppInitialized(state, action: PayloadAction<{ isInitialized: boolean }>) {
 			state.initialized = action.payload.isInitialized;
 		},
+		clearAuthData(state, action: PayloadAction) {
+			state.id = null;
+			state.login = null;
+			state.email = null;
+		},
+	},
+	selectors: {
+		selectIsInitialized: state => state.initialized,
+		selectError: state => state.error,
+		selectLogin: state => state.login,
+		selectAppStatus: state => state.status,
 	},
 });
 
@@ -73,3 +85,4 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
 
 export const appSlice = slice.reducer;
 export const appActions = slice.actions;
+export const { selectIsInitialized, selectError, selectLogin, selectAppStatus } = slice.selectors;

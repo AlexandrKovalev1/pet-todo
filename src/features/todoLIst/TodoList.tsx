@@ -1,14 +1,13 @@
 import { Task } from '../task/Task';
-import styled from 'styled-components';
 import { FC, useState } from 'react';
-import { FilterMenu } from './filterMenu/FilterMenu';
-import { FilterType } from 'bll/todolistSlice';
-import { useAppDispatch } from '../../app/store';
-import { AddItemForm } from '../../components/addItemForm/AddItemForm';
-import { ShadowWrapper } from '../../components/shadowWrapper/ShadowWrapper';
+import styled from 'styled-components';
+import { useAppDispatch, useAppSelector } from 'app/store';
 import { addTaskTC } from 'bll/tasksSlice';
-import { filterTasks } from '../../utils/filterTasks';
-import { useFetchTasks } from './useFetchTasks';
+import { FilterType } from 'bll/todolistSlice';
+import { filterTasks } from 'utils/filterTasks';
+import { FilterMenu } from './filterMenu/FilterMenu';
+import { AddItemForm } from 'components/addItemForm/AddItemForm';
+import { ShadowWrapper } from 'components/shadowWrapper/ShadowWrapper';
 
 type Props = {
 	todoId: string;
@@ -19,7 +18,7 @@ type Props = {
 export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 	const [openSettings, setOpenSettings] = useState(false);
 	const dispatch = useAppDispatch();
-	const { tasks } = useFetchTasks(todoId);
+	const tasks = useAppSelector(state => state.tasks[todoId]);
 
 	const addTask = (text: string) => {
 		dispatch(addTaskTC(todoId, text));

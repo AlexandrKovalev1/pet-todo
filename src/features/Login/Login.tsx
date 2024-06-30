@@ -1,12 +1,10 @@
-import React from 'react';
-import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import styled, { css } from 'styled-components';
-import { useAppDispatch, useAppSelector } from 'app/store';
+import { useFormik } from 'formik';
 import { PATH } from 'routes/routes';
 import { Navigate } from 'react-router-dom';
-import { selectIsAuth } from 'selectors/selectors';
-import { loginTC } from 'bll/authSlice';
+import styled, { css } from 'styled-components';
+import { loginTC, selectIsAuth } from 'bll/authSlice';
+import { useAppDispatch, useAppSelector } from 'app/store';
 
 const loginSchema = Yup.object().shape({
 	password: Yup.string().min(8, 'Too Short!').max(50, 'Too Long!').required('Required'),

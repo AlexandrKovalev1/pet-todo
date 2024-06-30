@@ -1,10 +1,10 @@
-import { useAppDispatch, useAppSelector } from '../../app/store';
-import { selectIsAuth, selectTodolists } from '../../selectors/selectors';
+import { useAppDispatch, useAppSelector } from 'app/store';
 import { useEffect } from 'react';
-import { getTodosTC } from 'bll/todolistSlice';
+import { getTodosTC, selectTodoLists } from 'bll/todolistSlice';
+import { selectIsAuth } from 'bll/authSlice';
 
 export const useFetchTodos = () => {
-	let todolists = useAppSelector(selectTodolists);
+	let todolists = useAppSelector(selectTodoLists);
 	const dispatch = useAppDispatch();
 	const isAuth = useAppSelector(selectIsAuth);
 

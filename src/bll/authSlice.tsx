@@ -4,6 +4,7 @@ import { appActions } from 'bll/appSlice';
 import { authApi, LoginParamsType } from 'api/auth-api';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { handleServerAppError, handleServerNetworkError } from 'utils/error-utils';
+import { todolistActions } from 'bll/todolistSlice';
 
 const initialState = {
 	isAuth: false,
@@ -16,6 +17,9 @@ const slice = createSlice({
 		setIsAuth(state, action: PayloadAction<{ isAuth: boolean }>) {
 			state.isAuth = action.payload.isAuth;
 		},
+	},
+	selectors: {
+		selectIsAuth: state => state.isAuth,
 	},
 });
 
@@ -41,6 +45,8 @@ export const logoutTC = () => (dispatch: Dispatch) => {
 			if (res.data.resultCode === ResultCode.SUCCESS) {
 				dispatch(appActions.setStatus({ status: 'succeeded' }));
 				dispatch(authActions.setIsAuth({ isAuth: false }));
+				dispatch(appActions.clearAuthData());
+				dispatch(todolistActions.clearTodos());
 			} else {
 				handleServerAppError(dispatch, res.data);
 			}
@@ -50,3 +56,4 @@ export const logoutTC = () => (dispatch: Dispatch) => {
 
 export const authSlice = slice.reducer;
 export const authActions = slice.actions;
+export const { selectIsAuth } = slice.selectors;

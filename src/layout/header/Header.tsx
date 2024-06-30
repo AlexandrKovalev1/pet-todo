@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { Icon } from '../../components/icon/Icon';
-import { Container } from '../../components/container/Container';
-import { useAppDispatch, useAppSelector } from '../../app/store';
-import { selectIsAuth, selectLogin } from '../../selectors/selectors';
-import { ProgressLinear } from '../../components/ProgressLinear/ProgressLinear';
-import { logoutTC } from 'bll/authSlice';
+import { logoutTC, selectIsAuth } from 'bll/authSlice';
+import { Icon } from 'components/icon/Icon';
+import { Container } from 'components/container/Container';
+import { useAppDispatch, useAppSelector } from 'app/store';
+import { ProgressLinear } from 'components/ProgressLinear/ProgressLinear';
+import { selectLogin } from 'bll/appSlice';
 
 type Props = {};
 export const Header: FC<Props> = ({ ...rest }) => {
