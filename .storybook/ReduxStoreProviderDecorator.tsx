@@ -1,9 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { RootStateType, store } from '../src/app/store';
+import { RootStateType } from '../src/app/store';
 import { combineReducers, legacy_createStore } from 'redux';
-import { tasksSlice, TasksType } from 'bll/tasksSlice';
-import { todolistSlice, TodolistDomainType } from 'bll/todolistSlice';
+import { tasksSlice } from 'bll/tasksSlice';
+import { todolistSlice } from 'bll/todolistSlice';
 import { v1 } from 'uuid';
 import { TaskPriorities, TaskStatuses } from '../src/api/task-api';
 import { appSlice } from 'bll/appSlice';

@@ -20,8 +20,8 @@ export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 	const dispatch = useAppDispatch();
 	const tasks = useAppSelector(state => state.tasks[todoId]);
 
-	const addTask = (text: string) => {
-		dispatch(addTaskTC(todoId, text));
+	const addTask = (title: string) => {
+		dispatch(addTaskTC({ todoId, title }));
 	};
 
 	const filteredTasks = filterTasks(filter, tasks);

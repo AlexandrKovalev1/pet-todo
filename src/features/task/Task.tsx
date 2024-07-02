@@ -22,17 +22,25 @@ export const Task: FC<Props> = ({ title, status, taskId, todoId, entityStatus, .
 
 	let taskIsCompleted = status === TaskStatuses.Completed;
 	const deleteTask = () => {
-		dispatch(deleteTaskTC(todoId, taskId));
+		dispatch(deleteTaskTC({ todoId, taskId }));
 	};
 
 	const changeTask = (e: ChangeEvent<HTMLInputElement>) => {
 		let status = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New;
 
-		dispatch(changeTaskTC(todoId, taskId, { status }));
+		dispatch(changeTaskTC({ todoId, taskId, setting: { status } }));
 	};
 
 	const editTaskTitle = (title: string) => {
-		dispatch(changeTaskTC(todoId, taskId, { title }));
+		dispatch(
+			changeTaskTC({
+				todoId,
+				taskId,
+				setting: {
+					title,
+				},
+			}),
+		);
 	};
 	return (
 		<Wrapper $completed={taskIsCompleted} disabled={disable}>

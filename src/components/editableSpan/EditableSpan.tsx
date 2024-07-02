@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { TaskStatuses } from '../../api/task-api';
 
@@ -14,6 +14,9 @@ export const EditableSpan: FC<Props> = ({ status, title, editText, disabled, ...
 	const [isEdit, setIsEdit] = useState(false);
 	const [text, setText] = useState(title);
 
+	useEffect(() => {
+		setText(title);
+	}, [title]);
 	const setEdit = () => {
 		!disabled && setIsEdit(true);
 	};

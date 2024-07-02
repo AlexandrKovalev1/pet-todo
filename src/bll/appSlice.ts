@@ -1,10 +1,9 @@
-import { Dispatch } from 'redux';
 import { authApi } from 'api/auth-api';
 import { ResultCode } from 'api/task-api';
 import { authActions } from 'bll/authSlice';
-import { todolistActions } from 'bll/todolistSlice';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { handleServerAppError, handleServerNetworkError } from 'utils/error-utils';
+import axios from 'axios';
 
 type UserType = {
 	id: number;
@@ -20,6 +19,30 @@ export type AppStateType = {
 	initialized: boolean;
 };
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed';
+
+export const initializeAppTC = createAsyncThunk(`app/initialize-app`, async (arg, thunkAPI) => {
+	const { dispatch } = thunkAPI;
+
+	dispatch(appActions.setStatus({ status: 'loading' }));
+	const res = await authApi.getIsAuth();
+	try {
+		if (res.data.resultCode === ResultCode.SUCCESS) {
+			dispatch(appActions.setStatus({ status: 'succeeded' }));
+		} else {
+			handleServerAppError(dispatch, res.data);
+		}
+	} catch (e) {
+		if (axios.isAxiosError(e)) {
+			handleServerNetworkError(dispatch, e.message);
+		} else {
+			handleServerNetworkError(dispatch, (e as Error).message);
+		}
+	} finally {
+		dispatch(appActions.setAppInitialized({ isInitialized: true }));
+	}
+
+	return { data: res.data.data };
+});
 
 const initialState = {
 	status: 'idle',
@@ -40,19 +63,21 @@ const slice = createSlice({
 		setError(state, action: PayloadAction<{ error: string | null }>) {
 			state.error = action.payload.error;
 		},
-		setAuthData(state, action: PayloadAction<{ data: UserType }>) {
-			state.id = action.payload.data.id;
-			state.login = action.payload.data.login;
-			state.email = action.payload.data.email;
-		},
 		setAppInitialized(state, action: PayloadAction<{ isInitialized: boolean }>) {
 			state.initialized = action.payload.isInitialized;
 		},
-		clearAuthData(state, action: PayloadAction) {
+		clearAuthData(state) {
 			state.id = null;
 			state.login = null;
 			state.email = null;
 		},
+	},
+	extraReducers: builder => {
+		builder.addCase(initializeAppTC.fulfilled, (state, action) => {
+			state.id = action.payload.data.id;
+			state.login = action.payload.data.login;
+			state.email = action.payload.data.email;
+		});
 	},
 	selectors: {
 		selectIsInitialized: state => state.initialized,
@@ -61,27 +86,6 @@ const slice = createSlice({
 		selectAppStatus: state => state.status,
 	},
 });
-
-export const initializeAppTC = () => (dispatch: Dispatch) => {
-	dispatch(appActions.setStatus({ status: 'loading' }));
-	authApi
-		.getIsAuth()
-		.then(res => {
-			if (res.data.resultCode === ResultCode.SUCCESS) {
-				dispatch(appActions.setStatus({ status: 'succeeded' }));
-				dispatch(appActions.setAuthData({ data: res.data.data }));
-				dispatch(authActions.setIsAuth({ isAuth: true }));
-			} else {
-				handleServerAppError(dispatch, res.data);
-			}
-		})
-		.catch(e => {
-			handleServerNetworkError(dispatch, e.message);
-		})
-		.finally(() => {
-			dispatch(appActions.setAppInitialized({ isInitialized: true }));
-		});
-};
 
 export const appSlice = slice.reducer;
 export const appActions = slice.actions;

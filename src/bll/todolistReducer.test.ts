@@ -1,6 +1,6 @@
-import { todolistActions, TodolistDomainType, todolistSlice } from 'bll/todolistSlice';
 import { v4 } from 'uuid';
-import { TodolistType } from '../api/todolists-api';
+import { TodolistType } from 'api/todolists-api';
+import { deleteTodoListTC, getTodosTC, todolistActions, TodolistDomainType, todolistSlice } from 'bll/todolistSlice';
 
 let initState: TodolistDomainType[] = [];
 let todolists: TodolistType[];
@@ -32,7 +32,7 @@ describe('reducer test', () => {
 	// });
 
 	it('should be removed todo', () => {
-		let action = todolistActions.deleteTodo({ todoId: initState[0].id });
+		let action = deleteTodoListTC.fulfilled({ todoId: initState[0].id }, '', '');
 
 		let newState = todolistSlice(initState, action);
 		expect(newState.length).toBe(0);
@@ -54,7 +54,7 @@ describe('reducer test', () => {
 	});
 
 	it('todolists should be set to the state', () => {
-		let action = todolistActions.setTodoLists({ todolists });
+		let action = getTodosTC.fulfilled({ todolists }, '');
 		let newState = todolistSlice(initState, action);
 
 		expect(newState.length).toBe(2);

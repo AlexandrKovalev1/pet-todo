@@ -11,9 +11,7 @@ const loginSchema = Yup.object().shape({
 	email: Yup.string().email('Invalid email').required('Required'),
 });
 
-type Props = {};
-
-export const Login = (props: Props) => {
+export const Login = () => {
 	const dispatch = useAppDispatch();
 	const isAuth = useAppSelector(selectIsAuth);
 
