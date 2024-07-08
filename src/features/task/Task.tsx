@@ -1,11 +1,11 @@
 import { ChangeEvent, FC } from 'react';
 import styled, { css } from 'styled-components';
-import { Button } from '../../components/button/Button';
-import { Icon } from '../../components/icon/Icon';
-import { changeTaskTC, deleteTaskTC } from 'bll/tasksSlice';
-import { EditableSpan } from '../../components/editableSpan/EditableSpan';
-import { TaskStatuses } from '../../api/task-api';
-import { useAppDispatch } from '../../app/store';
+import { Button } from 'components/button/Button';
+import { Icon } from 'components/icon/Icon';
+import { tasksThunks } from 'bll/tasksSlice';
+import { EditableSpan } from 'components/editableSpan/EditableSpan';
+import { TaskStatuses } from 'api/task-api';
+import { useAppDispatch } from 'app/store';
 import { RequestStatusType } from 'bll/appSlice';
 
 type Props = {
@@ -22,18 +22,18 @@ export const Task: FC<Props> = ({ title, status, taskId, todoId, entityStatus, .
 
 	let taskIsCompleted = status === TaskStatuses.Completed;
 	const deleteTask = () => {
-		dispatch(deleteTaskTC({ todoId, taskId }));
+		dispatch(tasksThunks.deleteTask({ todoId, taskId }));
 	};
 
 	const changeTask = (e: ChangeEvent<HTMLInputElement>) => {
 		let status = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New;
 
-		dispatch(changeTaskTC({ todoId, taskId, setting: { status } }));
+		dispatch(tasksThunks.changeTask({ todoId, taskId, setting: { status } }));
 	};
 
 	const editTaskTitle = (title: string) => {
 		dispatch(
-			changeTaskTC({
+			tasksThunks.changeTask({
 				todoId,
 				taskId,
 				setting: {

@@ -7,14 +7,14 @@ import { Sceleton } from 'components/sceleton/Sceleton';
 import { SnackBar } from 'components/snackBar/SnackBar';
 import { useAppDispatch, useAppSelector } from './store';
 import { Container } from 'components/container/Container';
-import { initializeAppTC, selectIsInitialized } from 'bll/appSlice';
+import { appThunks, selectIsInitialized } from 'bll/appSlice';
 
 const App = memo(() => {
 	const dispatch = useAppDispatch();
 	const initialized = useAppSelector(selectIsInitialized);
 
 	useEffect(() => {
-		dispatch(initializeAppTC());
+		dispatch(appThunks.initializeApp());
 	}, [dispatch]);
 
 	if (!initialized) {

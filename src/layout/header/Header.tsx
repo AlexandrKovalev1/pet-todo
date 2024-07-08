@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { logoutTC, selectIsAuth } from 'bll/authSlice';
+import { authThunks, selectIsAuth } from 'bll/authSlice';
 import { Icon } from 'components/icon/Icon';
 import { Container } from 'components/container/Container';
 import { useAppDispatch, useAppSelector } from 'app/store';
@@ -34,7 +34,7 @@ const LogoinBlock = () => {
 	const dispatch = useAppDispatch();
 
 	const onClickLogoutHandler = () => {
-		dispatch(logoutTC());
+		dispatch(authThunks.logout());
 	};
 
 	return isAuth ? (

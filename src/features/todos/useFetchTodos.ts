@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from 'app/store';
 import { useEffect } from 'react';
-import { getTodosTC, selectTodoLists } from 'bll/todolistSlice';
+import { selectTodoLists, todoListThunks } from 'bll/todolistSlice';
 import { selectIsAuth } from 'bll/authSlice';
 
 export const useFetchTodos = () => {
@@ -12,7 +12,7 @@ export const useFetchTodos = () => {
 		if (!isAuth) {
 			return;
 		}
-		dispatch(getTodosTC());
+		dispatch(todoListThunks.getTodos());
 	}, [dispatch, isAuth]);
 
 	return {

@@ -4,7 +4,7 @@ import { tasksSlice } from 'bll/tasksSlice';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { appSlice } from 'bll/appSlice';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, createAsyncThunk } from '@reduxjs/toolkit';
 import { authSlice } from 'bll/authSlice';
 
 const rootReducers = combineReducers({
@@ -18,7 +18,7 @@ export const store = configureStore({
 	reducer: rootReducers,
 });
 
-type AppDispatchType = ThunkDispatch<RootStateType, unknown, Action>;
+export type AppDispatchType = ThunkDispatch<RootStateType, unknown, Action>;
 
 export const useAppDispatch = useDispatch<AppDispatchType>;
 export const useAppSelector: TypedUseSelectorHook<RootStateType> = useSelector;

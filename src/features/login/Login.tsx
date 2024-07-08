@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { PATH } from 'routes/routes';
 import { Navigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import { loginTC, selectIsAuth } from 'bll/authSlice';
+import { authThunks, selectIsAuth } from 'bll/authSlice';
 import { useAppDispatch, useAppSelector } from 'app/store';
 
 const loginSchema = Yup.object().shape({
@@ -21,8 +21,9 @@ export const Login = () => {
 			password: '',
 			rememberMe: false,
 		},
-		onSubmit: values => {
-			dispatch(loginTC(values));
+		onSubmit: async (values, formikHelpers) => {
+			const res = await dispatch(authThunks.login(values));
+			console.log(res);
 		},
 		validationSchema: loginSchema,
 		validate: values => {

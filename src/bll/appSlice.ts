@@ -1,48 +1,9 @@
 import { authApi } from 'api/auth-api';
 import { ResultCode } from 'api/task-api';
 import { authActions } from 'bll/authSlice';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { handleServerAppError, handleServerNetworkError } from 'utils/error-utils';
-import axios from 'axios';
-
-type UserType = {
-	id: number;
-	email: string;
-	login: string;
-};
-export type AppStateType = {
-	status: RequestStatusType;
-	error: string | null;
-	id: number | null;
-	email: string | null;
-	login: string | null;
-	initialized: boolean;
-};
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed';
-
-export const initializeAppTC = createAsyncThunk(`app/initialize-app`, async (arg, thunkAPI) => {
-	const { dispatch } = thunkAPI;
-
-	dispatch(appActions.setStatus({ status: 'loading' }));
-	const res = await authApi.getIsAuth();
-	try {
-		if (res.data.resultCode === ResultCode.SUCCESS) {
-			dispatch(appActions.setStatus({ status: 'succeeded' }));
-		} else {
-			handleServerAppError(dispatch, res.data);
-		}
-	} catch (e) {
-		if (axios.isAxiosError(e)) {
-			handleServerNetworkError(dispatch, e.message);
-		} else {
-			handleServerNetworkError(dispatch, (e as Error).message);
-		}
-	} finally {
-		dispatch(appActions.setAppInitialized({ isInitialized: true }));
-	}
-
-	return { data: res.data.data };
-});
+import { createAppAsyncThunk } from 'utils/createAppAsyncThunk';
 
 const initialState = {
 	status: 'idle',
@@ -73,10 +34,12 @@ const slice = createSlice({
 		},
 	},
 	extraReducers: builder => {
-		builder.addCase(initializeAppTC.fulfilled, (state, action) => {
-			state.id = action.payload.data.id;
-			state.login = action.payload.data.login;
-			state.email = action.payload.data.email;
+		builder.addCase(initializeApp.fulfilled, (state, action) => {
+			if (action.payload) {
+				state.id = action.payload.data.id;
+				state.login = action.payload.data.login;
+				state.email = action.payload.data.email;
+			}
 		});
 	},
 	selectors: {
@@ -86,7 +49,41 @@ const slice = createSlice({
 		selectAppStatus: state => state.status,
 	},
 });
+//thunks
+const initializeApp = createAppAsyncThunk(
+	`${slice.name}/initialize-app`,
+	async (arg, { dispatch, rejectWithValue }) => {
+		dispatch(appActions.setStatus({ status: 'loading' }));
 
+		try {
+			const res = await authApi.getIsAuth();
+			if (res.data.resultCode === ResultCode.SUCCESS) {
+				dispatch(appActions.setStatus({ status: 'succeeded' }));
+				dispatch(authActions.setIsLoggedIn({ isAuth: true }));
+				return { data: res.data.data };
+			} else {
+				handleServerAppError(dispatch, res.data);
+				return rejectWithValue({ error: res.data.messages[0] });
+			}
+		} catch (e) {
+			handleServerNetworkError(e, dispatch);
+		} finally {
+			dispatch(appActions.setAppInitialized({ isInitialized: true }));
+		}
+	},
+);
+//types
+export type AppStateType = {
+	status: RequestStatusType;
+	error: string | null;
+	id: number | null;
+	email: string | null;
+	login: string | null;
+	initialized: boolean;
+};
+export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed';
+//exports
 export const appSlice = slice.reducer;
 export const appActions = slice.actions;
+export const appThunks = { initializeApp };
 export const { selectIsInitialized, selectError, selectLogin, selectAppStatus } = slice.selectors;

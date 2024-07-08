@@ -2,12 +2,12 @@ import { Task } from '../task/Task';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from 'app/store';
-import { addTaskTC } from 'bll/tasksSlice';
 import { FilterType } from 'bll/todolistSlice';
 import { filterTasks } from 'utils/filterTasks';
 import { FilterMenu } from './filterMenu/FilterMenu';
 import { AddItemForm } from 'components/addItemForm/AddItemForm';
 import { ShadowWrapper } from 'components/shadowWrapper/ShadowWrapper';
+import { tasksThunks } from 'bll/tasksSlice';
 
 type Props = {
 	todoId: string;
@@ -21,7 +21,7 @@ export const TodoList: FC<Props> = ({ filter, todoId, title, ...rest }) => {
 	const tasks = useAppSelector(state => state.tasks[todoId]);
 
 	const addTask = (title: string) => {
-		dispatch(addTaskTC({ todoId, title }));
+		dispatch(tasksThunks.addTask({ todoId, title }));
 	};
 
 	const filteredTasks = filterTasks(filter, tasks);

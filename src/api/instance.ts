@@ -12,5 +12,6 @@ export const instance = axios.create({
 export type ResponseType<D = {}> = {
 	resultCode: number;
 	messages: string[];
+	fieldErrors?: { field: string; error: string }[];
 	data: D;
 };

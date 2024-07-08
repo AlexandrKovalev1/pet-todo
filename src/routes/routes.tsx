@@ -1,7 +1,7 @@
 import App from '../app/App';
 import { useAppSelector } from 'app/store';
 import { Todos } from 'features/todos/Todos';
-import { Login } from 'features/Login/Login';
+import { Login } from 'features/login/Login';
 import { ErrorPage } from 'components/ErrorPage/ErrorPage';
 import { createBrowserRouter, Navigate, RouteObject, Outlet } from 'react-router-dom';
 import { selectIsAuth } from 'bll/authSlice';

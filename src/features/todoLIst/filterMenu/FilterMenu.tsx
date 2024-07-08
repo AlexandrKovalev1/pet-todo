@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useAppDispatch } from 'app/store';
 import { Icon } from 'components/icon/Icon';
 import { Button } from 'components/button/Button';
-import { deleteTodoListTC, FilterType, todolistActions } from 'bll/todolistSlice';
+import { FilterType, todolistActions, todoListThunks } from 'bll/todolistSlice';
 
 type Props = {
 	active: boolean;
@@ -13,7 +13,7 @@ type Props = {
 };
 export const FilterMenu: FC<Props> = ({ active, setActive, filter, todoId, ...rest }) => {
 	const dispatch = useAppDispatch();
-	const deleteTodo = () => dispatch(deleteTodoListTC(todoId));
+	const deleteTodo = () => dispatch(todoListThunks.deleteTodoList(todoId));
 	const setOpen = () => setActive(true);
 	const setClose = () => setActive(false);
 
