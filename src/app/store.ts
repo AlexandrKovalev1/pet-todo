@@ -1,28 +1,20 @@
-import { Action, AnyAction, combineReducers } from 'redux';
-import { todolistSlice } from 'bll/todolistSlice';
-import { tasksSlice } from 'bll/tasksSlice';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { todolistSlice } from 'features/todos/model/_tests_/todolistSlice';
+import { tasksSlice } from 'features/task/model/tasksSlice';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { appSlice } from 'bll/appSlice';
-import { configureStore, createAsyncThunk } from '@reduxjs/toolkit';
-import { authSlice } from 'bll/authSlice';
-
-const rootReducers = combineReducers({
-	todoLists: todolistSlice,
-	tasks: tasksSlice,
-	app: appSlice,
-	auth: authSlice,
-});
+import { appSlice } from 'app/appSlice';
+import { configureStore } from '@reduxjs/toolkit';
+import { authSlice } from 'features/login/model/authSlice';
 
 export const store = configureStore({
-	reducer: rootReducers,
+	reducer: {
+		todoLists: todolistSlice,
+		tasks: tasksSlice,
+		app: appSlice,
+		auth: authSlice,
+	},
 });
 
-export type AppDispatchType = ThunkDispatch<RootStateType, unknown, Action>;
+export const useAppDispatch = useDispatch<typeof store.dispatch>;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export const useAppDispatch = useDispatch<AppDispatchType>;
-export const useAppSelector: TypedUseSelectorHook<RootStateType> = useSelector;
-
-export type RootStateType = ReturnType<typeof store.getState>;
-
-export type AppThunkType<ReturnType = void> = ThunkAction<ReturnType, RootStateType, unknown, AnyAction>;
+export type RootState = ReturnType<typeof store.getState>;

@@ -26,7 +26,7 @@ body {
 	font-size: 20px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	background-image: url('assets/images/baccground.jpg');
+	background-image: url('common/assets/images/baccground.jpg');
 	&:before {
 		content: '';
 		position: fixed;

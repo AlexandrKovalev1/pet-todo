@@ -1,9 +1,9 @@
-import { Task } from './Task';
+import { Task } from 'features/task/ui/Task';
 import { Provider } from 'react-redux';
 import { store } from '../../app/store';
 import { StoryObj } from '@storybook/react';
 import { ReduxStoreProviderDecorator } from '../../../.storybook/ReduxStoreProviderDecorator';
-import { TaskStatuses } from '../../api/task-api';
+import { TaskStatuses } from 'common/enums/enums';
 
 export default {
 	title: 'TaskExample',

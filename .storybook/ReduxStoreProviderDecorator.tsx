@@ -1,12 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { RootStateType } from '../src/app/store';
+import { RootState } from '../src/app/store';
 import { combineReducers, legacy_createStore } from 'redux';
-import { tasksSlice } from 'bll/tasksSlice';
-import { todolistSlice } from 'bll/todolistSlice';
-import { v1 } from 'uuid';
-import { TaskPriorities, TaskStatuses } from '../src/api/task-api';
-import { appSlice } from 'bll/appSlice';
+import { tasksSlice } from 'features/task/model/tasksSlice';
+import { todolistSlice } from 'features/todos/model/_tests_/todolistSlice';
+import { v1, v4 } from 'uuid';
+import { TaskPriorities, TaskStatuses } from 'features/task/api/task-api';
+import { appSlice } from 'app/appSlice';
+import { configureStore } from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({
 	todoLists: todolistSlice,
@@ -14,22 +15,10 @@ const rootReducer = combineReducers({
 	app: appSlice,
 });
 
-let initialGlobalState: RootStateType = {
+let initialGlobalState: RootState = {
 	todoLists: [
-		{
-			id: 'todolistId1',
-			title: 'What to learn',
-			filter: 'All',
-			addedDate: '',
-			order: 0,
-		},
-		{
-			id: 'todolistId2',
-			title: 'What to buy',
-			filter: 'All',
-			addedDate: '',
-			order: 0,
-		},
+		{ id: v4(), title: 'First Todo', addedDate: '', order: 0, filter: 'All', entityStatus: 'idle' },
+		{ id: v4(), title: 'Second Todo', addedDate: '', order: 0, filter: 'All', entityStatus: 'idle' },
 	],
 	tasks: {
 		['todolistId1']: [
@@ -44,6 +33,7 @@ let initialGlobalState: RootStateType = {
 				addedDate: '',
 				startDate: '',
 				deadline: '',
+				entityStatus: 'idle',
 			},
 			{
 				id: v1(),
@@ -56,6 +46,7 @@ let initialGlobalState: RootStateType = {
 				addedDate: '',
 				startDate: '',
 				deadline: '',
+				entityStatus: 'idle',
 			},
 		],
 		['todolistId2']: [
@@ -70,6 +61,7 @@ let initialGlobalState: RootStateType = {
 				addedDate: '',
 				startDate: '',
 				deadline: '',
+				entityStatus: 'idle',
 			},
 			{
 				id: v1(),
@@ -82,17 +74,29 @@ let initialGlobalState: RootStateType = {
 				addedDate: '',
 				startDate: '',
 				deadline: '',
+				entityStatus: 'idle',
 			},
 		],
 	},
 	app: {
 		status: 'idle',
 		error: null,
+		id: null,
+		login: null,
+		email: null,
+		initialized: false,
+	},
+	auth: {
+		isAuth: false,
 	},
 };
 
 //@ts-ignore
-export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState as RootStateType);
+// export const storyBookStore = legacy_createStore(rootReducer, initialGlobalState as RootStateType);
+
+export const storyBookStore = configureStore({
+	reducer: rootReducer,
+});
 
 export const ReduxStoreProviderDecorator = (storyFn: () => React.ReactNode) => {
 	return <Provider store={storyBookStore}>{storyFn()}</Provider>;
